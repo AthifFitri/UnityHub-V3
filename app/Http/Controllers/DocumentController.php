@@ -23,12 +23,12 @@ class DocumentController extends Controller
             'li01_report_duty_confirmation' => 'LI01 - Report Duty Confirmation',
             'li02_report_duty_confirmation' => 'LI02 - Planning Form',
             'li03_report_duty_confirmation' => 'LI03 - Progress Report',
-            'csm4993_project_demo_slide' => 'CSM4993 - Project Demo Slide',
-            'csm4993_final_project_report' => 'CSM4993 - Final Project Report',
-            'csm4994_final_project_report' => 'CSM4994 - Final Project Report',
-            'csm4995_project_demo_slide' => 'CSM4995 - Project Demo Slide',
-            'csm4995_final_project_report' => 'CSM4995 - Final Project Report',
-            'csm4996_final_project_report' => 'CSM4996 - Final Project Report',
+            'csm4908_project_demo_slide' => 'CSM4908 - Project Demo Slide',
+            'csm4908_final_project_report' => 'CSM4908 - Final Project Report',
+            'csm4918_final_project_report' => 'CSM4918 - Final Project Report',
+            'csm4928_project_demo_slide' => 'CSM4928 - Project Demo Slide',
+            'csm4928_final_project_report' => 'CSM4928 - Final Project Report',
+            'csm4938_final_project_report' => 'CSM4938 - Final Project Report',
         ];
 
         return $documentTypes;
@@ -47,12 +47,12 @@ class DocumentController extends Controller
             'li01_report_duty_confirmation' => 'LI01 - Report Duty Confirmation',
             'li02_report_duty_confirmation' => 'LI02 - Planning Form',
             'li03_report_duty_confirmation' => 'LI03 - Progress Report',
-            'csm4993_project_demo_slide' => 'CSM4993 - Project Demo Slide',
-            'csm4993_final_project_report' => 'CSM4993 - Final Project Report',
-            'csm4994_final_project_report' => 'CSM4994 - Final Project Report',
-            'csm4995_project_demo_slide' => 'CSM4995 - Project Demo Slide',
-            'csm4995_final_project_report' => 'CSM4995 - Final Project Report',
-            'csm4996_final_project_report' => 'CSM4996 - Final Project Report',
+            'csm4908_project_demo_slide' => 'CSM4908 - Project Demo Slide',
+            'csm4908_final_project_report' => 'CSM4908 - Final Project Report',
+            'csm4918_final_project_report' => 'CSM4918 - Final Project Report',
+            'csm4928_project_demo_slide' => 'CSM4928 - Project Demo Slide',
+            'csm4928_final_project_report' => 'CSM4928 - Final Project Report',
+            'csm4938_final_project_report' => 'CSM4938 - Final Project Report',
         ];
 
         // Filter out document types that are already uploaded by the student

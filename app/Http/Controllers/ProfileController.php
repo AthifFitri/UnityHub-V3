@@ -176,8 +176,7 @@ class ProfileController extends Controller
     public function edit_coach()
     {
         $coach = auth()->user();
-        $industries = Industry::all();
-        return view('coach.profile.edit', compact('coach', 'industries'));
+        return view('coach.profile.edit', compact('coach'));
     }
 
     public function update_coach(Request $request)
@@ -200,7 +199,6 @@ class ProfileController extends Controller
         $coach->update([
             'coachName' => $request->coachName,
             'coachPhone' => $request->coachPhone,
-            'indId' => $request->indId,
         ]);
 
         return redirect()->route('coaches.profile.index')->with('success', 'Profile updated successfully.');

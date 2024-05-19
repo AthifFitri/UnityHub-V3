@@ -30,8 +30,8 @@
                             <p class="ml-2 text-black">{{ $coach->coachEmail }}</p>
                         </div>
                         <div class="flex items-center mt-2">
-                            <i class="fas fa-industry text-gray-500"></i> <!-- Font Awesome icon -->
-                            <p class="ml-2 text-black">{{ $coach->industry->indName }}</p> <!-- Display the coach's industry -->
+                            <i class="fas fa-industry text-gray-500"></i>
+                            <p class="ml-2 text-black">{{ $coach->industry->indName }}</p>
                         </div>
                     </div>
                     <!-- Add Update Profile Button -->

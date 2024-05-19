@@ -23,17 +23,6 @@
                         value="{{ $coach->coachPhone }}" required>
                 </div>
 
-                {{-- Coach Industry --}}
-                <div class="mb-4">
-                    <label for="coachIndustry" class="block font-medium text-base text-gray-700">Industry</label>
-                    <select name="indId" id="coachIndustry" class="block w-full rounded-md p-1" required>
-                        @foreach ($industries as $industry)
-                            <option value="{{ $industry->indId }}"
-                                {{ $coach->indId == $industry->indId ? 'selected' : '' }}>{{ $industry->indName }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
                 <div class="flex items-center justify-center mt-4">
                     <button type="submit"
                         class="text-center bg-green-700 text-white py-1 w-16 rounded-md hover:bg-green-400 hover:text-black">

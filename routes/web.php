@@ -8,6 +8,7 @@ use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\LogbookController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\ResumeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -144,4 +145,12 @@ Route::middleware('auth:coach')->group(function () {
     // Module Manage Logbook
     Route::get('/coach/logbook/index', [LogbookController::class, 'index_coach'])->name('coaches.logbooks.index');
     Route::put('/coach/logbooks/{logId}', [LogbookController::class, 'update_coach'])->name('coaches.logbooks.update');
+
+    // Module Manage Documentation
+    Route::get('/coach/resume/index', [ResumeController::class, 'index_coach'])->name('coaches.resume.index');
+    Route::get('/coach/resume/create', [ResumeController::class, 'create_coach'])->name('coaches.resume.create');
+    Route::post('/coach/resume/store', [ResumeController::class, 'store_coach'])->name('coaches.resume.store');
+    Route::get('/coach/resume/edit/{id}', [ResumeController::class, 'edit_coach'])->name('coaches.resume.edit');
+    Route::put('/coach/resume/update/{id}', [ResumeController::class, 'update_coach'])->name('coaches.resume.update');
+    Route::delete('/coach/resume/delete/{id}', [ResumeController::class, 'destroy_coach'])->name('coaches.resume.destroy');
 });

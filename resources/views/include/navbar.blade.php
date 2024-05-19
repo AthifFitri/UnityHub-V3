@@ -75,7 +75,11 @@
                 </li>
                 <li><a href="{{ route('coaches.logbooks.index') }}"
                         class="hover:text-blue-400 @if (request()->routeIs('coaches.logbooks.index')) font-semibold text-blue-400 @endif">Student
-                        Logbook</a></li>
+                        Logbook</a>
+                </li>
+                <li><a href="{{ route('coaches.resume.index') }}"
+                        class="hover:text-blue-400 @if (request()->routeIs('coaches.resume.index')) font-semibold text-blue-400 @endif">Resume</a>
+                </li>
             </ul>
         @endauth
 

@@ -19,6 +19,7 @@ class Coach extends Authenticatable
         'coachPhone',
         'coachEmail',
         'coachPassword',
+        'coachResume',
         'indId'
     ];
 

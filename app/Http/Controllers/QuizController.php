@@ -18,7 +18,7 @@ class QuizController extends Controller
     public function show_student_score($id)
     {
         $student = Student::findOrFail($id);
-        $courses = ['CSM4993', 'CSM4995'];
+        $courses = ['CSM4908', 'CSM4928'];
         $quizzes = Quiz::where('stuId', $id)->whereIn('course', $courses)->get()->keyBy('course');
 
         // Ensure all courses are included
@@ -43,7 +43,7 @@ class QuizController extends Controller
     public function update_coordinator(Request $request, $id, $course)
     {
         $validatedData = $request->validate([
-            'score' => 'required|numeric|min:0|max:10', // Assuming score is between 0 and 10
+            'score' => 'required|numeric|min:0|max:10',
         ]);
 
         $quiz = Quiz::updateOrCreate(

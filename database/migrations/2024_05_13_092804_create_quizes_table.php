@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('quizes', function (Blueprint $table) {
             $table->id('quizId');
-            $table->enum('course', ['CSM4993', 'CSM4995']);
+            $table->enum('course', ['CSM4908', 'CSM4928']);
             $table->unsignedBigInteger('stuId');
             $table->float('score');
             $table->timestamps();

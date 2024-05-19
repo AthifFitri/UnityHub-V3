@@ -22,7 +22,7 @@
                 <thead>
                     <tr class="bg-gray-400 text-white">
                         <th class="border px-4 py-2">Course</th>
-                        <th class="border px-4 py-2">Quiz Score (%)</th>
+                        <th class="border px-4 py-2">Quiz Score (10%)</th>
                         <th class="border px-4 py-2">Action</th>
                     </tr>
                 </thead>

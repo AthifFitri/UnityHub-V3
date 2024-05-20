@@ -17,6 +17,7 @@ class Logbook extends Model
         'start_date',
         'end_date',
         'attendance',
+        'proof',
         'daily_activities',
         'knowledge_skill',
         'problem_comment',

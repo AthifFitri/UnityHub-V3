@@ -6,9 +6,10 @@
             <h1 class="text-3xl font-bold">Internship Logbook</h1>
         </div>
 
-        <a href="{{ route('logbooks.create') }}"
-            class="btn btn-primary inline-block ml-5 py-3 w-44 rounded-md text-center bg-blue-700 text-white hover:bg-blue-400 hover:text-black">Create
-            New Logbook</a>
+        <a href="{{ route('student.logbooks.create') }}"
+            class="btn btn-primary inline-block ml-5 py-3 w-44 rounded-md text-center bg-blue-700 text-white hover:bg-blue-400 hover:text-black">
+            Create New Logbook
+        </a>
 
         <div class="bg-gray-100 p-6 rounded-md shadow-md mt-4">
             @if (session('success'))
@@ -25,9 +26,10 @@
                             <th class="border px-4 py-2">Start Date</th>
                             <th class="border px-4 py-2">End Date</th>
                             <th class="border px-4 py-2">Attendance</th>
+                            <th class="border px-4 py-2">Proof</th>
                             <th class="border px-4 py-2">Daily Activities</th>
-                            <th class="border px-4 py-2">Knowledge/Skills Gained</th>
-                            <th class="border px-4 py-2">Problems/Comments</th>
+                            <th class="border px-4 py-2">Knowledge / Skills Gained</th>
+                            <th class="border px-4 py-2">Problems / Comments</th>
                             <th class="border px-4 py-2">Status</th>
                             <th class="border px-4 py-2">Actions</th>
                         </tr>
@@ -35,10 +37,10 @@
                     <tbody>
                         @foreach ($entries as $entry)
                             <tr class="text-center">
-                                <td class="border px-4 py-2">{{ $entry->week }}</td>
-                                <td class="border px-4 py-2">{{ $entry->start_date }}</td>
-                                <td class="border px-4 py-2">{{ $entry->end_date }}</td>
-                                <td class="border px-4 py-2">
+                                <td class="border px-4 py-2 w-8">{{ $entry->week }}</td>
+                                <td class="border px-4 py-2 w-32">{{ $entry->start_date }}</td>
+                                <td class="border px-4 py-2 w-32">{{ $entry->end_date }}</td>
+                                <td class="border px-4 py-2 w-52">
                                     <ul class="list-inside space-y-1">
                                         @foreach (json_decode($entry->attendance, true) as $day => $status)
                                             <li class="flex items-center">
@@ -46,8 +48,6 @@
                                                 <span>
                                                     @if ($status === 'present')
                                                         Present
-                                                    @elseif ($status === 'absent')
-                                                        Absent
                                                     @elseif ($status === 'public_holiday')
                                                         Public Holiday
                                                     @elseif ($status === 'annual_leave')
@@ -60,10 +60,18 @@
                                         @endforeach
                                     </ul>
                                 </td>
-                                <td class="border px-4 py-2">{{ $entry->daily_activities }}</td>
-                                <td class="border px-4 py-2">{{ $entry->knowledge_skill }}</td>
-                                <td class="border px-4 py-2">{{ $entry->problem_comment }}</td>
-                                <td class="border px-4 py-2">
+                                <td class="border px-4 py-2 w-10">
+                                    @if ($entry->proof)
+                                        <a href="{{ asset('proof/' . $entry->proof) }}" target="_blank"
+                                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">View</a>
+                                    @else
+                                        <p class="text-blue-500">No proof needed</p>
+                                    @endif
+                                </td>
+                                <td class="border px-4 py-2 w-44">{{ $entry->daily_activities }}</td>
+                                <td class="border px-4 py-2 w-60">{{ $entry->knowledge_skill }}</td>
+                                <td class="border px-4 py-2 w-60">{{ $entry->problem_comment }}</td>
+                                <td class="border px-4 py-2 w-10">
                                     <span
                                         style="background-color: {{ $entry->status === 'pending' ? '#EF4444' : '#10B981' }}"
                                         class="rounded-full px-3 py-1 text-sm font-semibold text-white hover:bg-opacity-75 transition duration-300 ease-in-out"
@@ -71,9 +79,9 @@
                                         {{ ucfirst($entry->status) }}
                                     </span>
                                 </td>
-                                <td class="border px-4 py-2">
+                                <td class="border px-4 py-2 w-10">
                                     @if ($entry->status === 'pending')
-                                        <a href="{{ route('logbooks.edit', $entry->logId) }}"
+                                        <a href="{{ route('student.logbooks.edit', $entry->logId) }}"
                                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</a>
                                     @else
                                         <p class="text-blue-500">No action required</p>

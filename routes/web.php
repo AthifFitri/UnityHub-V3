@@ -52,11 +52,11 @@ Route::middleware('auth:student')->group(function () {
     Route::get('/student/material/index', [MaterialController::class, 'index_student'])->name('student.materials.index');
 
     // Module Manage Logbook
-    Route::get('/student/logbook/index', [LogbookController::class, 'index'])->name('logbooks.index');
-    Route::get('/student/logbook/create', [LogbookController::class, 'create'])->name('logbooks.create');
-    Route::post('/student/logbook/index', [LogbookController::class, 'store'])->name('logbooks.store');
-    Route::get('/student/logbook/{entry}/edit', [LogbookController::class, 'edit'])->name('logbooks.edit');
-    Route::put('/student/logbook/{entry}', [LogbookController::class, 'update'])->name('logbooks.update');
+    Route::get('/student/logbook/index', [LogbookController::class, 'index_student'])->name('student.logbooks.index');
+    Route::get('/student/logbook/create', [LogbookController::class, 'create_student'])->name('student.logbooks.create');
+    Route::post('/student/logbook/index', [LogbookController::class, 'store_student'])->name('student.logbooks.store');
+    Route::get('/student/logbook/{entry}/edit', [LogbookController::class, 'edit_student'])->name('student.logbooks.edit');
+    Route::put('/student/logbook/{entry}', [LogbookController::class, 'update_student'])->name('student.logbooks.update');
 
     // Module Manage Documentation
     Route::get('/student/documentation/index', [DocumentController::class, 'index_student'])->name('student.documents.index');

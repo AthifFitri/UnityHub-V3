@@ -19,8 +19,8 @@
                 <li><a href="{{ route('student.documents.index') }}"
                         class="hover:text-blue-400 @if (request()->routeIs('student.documents.index')) font-semibold text-blue-400 @endif">Document</a>
                 </li>
-                <li><a href="{{ route('logbooks.index') }}"
-                        class="hover:text-blue-400 @if (request()->routeIs('logbooks.index')) font-semibold text-blue-400 @endif">Logbook</a>
+                <li><a href="{{ route('student.logbooks.index') }}"
+                        class="hover:text-blue-400 @if (request()->routeIs('student.logbooks.index')) font-semibold text-blue-400 @endif">Logbook</a>
                 </li>
             </ul>
         @endauth

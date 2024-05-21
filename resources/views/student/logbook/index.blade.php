@@ -18,6 +18,11 @@
                 </div>
             @endif
 
+            <div class="flex mb-5">
+                <p class="font-bold mr-2">Remaining Annual Leave: </p>
+                <p class="font-semibold text-orange-500">{{ $remainingAnnualLeave }}</p>
+            </div>
+
             @if ($entries->count() > 0)
                 <table class="w-full border">
                     <thead>
@@ -44,7 +49,7 @@
                                     <ul class="list-inside space-y-1">
                                         @foreach (json_decode($entry->attendance, true) as $day => $status)
                                             <li class="flex items-center">
-                                                <span class="mr-2">{{ "Day $day:" }}</span>
+                                                <span class="mr-2 font-semibold">{{ "Day $day:" }}</span>
                                                 <span>
                                                     @if ($status === 'present')
                                                         Present
@@ -61,11 +66,26 @@
                                     </ul>
                                 </td>
                                 <td class="border px-4 py-2 w-10">
-                                    @if ($entry->proof)
-                                        <a href="{{ asset('proof/' . $entry->proof) }}" target="_blank"
-                                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">View</a>
+                                    @php
+                                        $attendanceRequiresProof = false;
+                                        $attendanceStatuses = json_decode($entry->attendance, true);
+                                        foreach ($attendanceStatuses as $status) {
+                                            if ($status === 'annual_leave' || $status === 'medical_leave') {
+                                                $attendanceRequiresProof = true;
+                                                break;
+                                            }
+                                        }
+                                    @endphp
+
+                                    @if ($attendanceRequiresProof)
+                                        @if ($entry->proof)
+                                            <a href="{{ asset('proof/' . $entry->proof) }}" target="_blank"
+                                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">View</a>
+                                        @else
+                                            <p class="text-red-500">No proof uploaded</p>
+                                        @endif
                                     @else
-                                        <p class="text-blue-500">No proof needed</p>
+                                        <p class="text-green-500">No proof needed</p>
                                     @endif
                                 </td>
                                 <td class="border px-4 py-2 w-44">{{ $entry->daily_activities }}</td>

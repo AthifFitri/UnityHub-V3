@@ -5,22 +5,56 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Logbook;
-use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
 
 class LogbookController extends Controller
 {
-    // Student functions
     public function index_student()
     {
         $student = Auth::user();
         $entries = Logbook::where('stuId', $student->stuId)->get();
-        return view('student.logbook.index', compact('entries'));
+
+        // Initialize counter for annual leave taken
+        $annualLeaveTaken = 0;
+
+        // Loop through logbook entries to count total annual leave taken
+        foreach ($entries as $entry) {
+            $attendance = json_decode($entry->attendance, true);
+
+            // Count occurrences of 'annual_leave' in the attendance
+            $annualLeaveTaken += count(array_filter($attendance, function ($status) {
+                return $status === 'annual_leave';
+            }));
+        }
+
+        // Calculate remaining annual leave
+        $remainingAnnualLeave = 12 - $annualLeaveTaken;
+
+        return view('student.logbook.index', compact('entries', 'remainingAnnualLeave'));
     }
 
     public function create_student()
     {
-        return view('student.logbook.create');
+        $student = Auth::user();
+        $entries = Logbook::where('stuId', $student->stuId)->get();
+
+        // Initialize counter for annual leave taken
+        $annualLeaveTaken = 0;
+
+        // Loop through logbook entries to count total annual leave taken
+        foreach ($entries as $entry) {
+            $attendance = json_decode($entry->attendance, true);
+
+            // Count occurrences of 'annual_leave' in the attendance
+            $annualLeaveTaken += count(array_filter($attendance, function ($status) {
+                return $status === 'annual_leave';
+            }));
+        }
+
+        // Calculate remaining annual leave
+        $remainingAnnualLeave = 12 - $annualLeaveTaken;
+
+        return view('student.logbook.create', compact('remainingAnnualLeave'));
     }
 
     public function store_student(Request $request)
@@ -53,10 +87,6 @@ class LogbookController extends Controller
             $file->move(public_path('proof'), $fileName);
         }
 
-        // $file = $request->file('proof');
-        // $fileName = time() . '.' . $file->getClientOriginalExtension();
-        // $file->move(public_path('proof'), $fileName);
-
         // Create a new Logbook instance
         $logbook = new Logbook([
             'stuId' => $student->stuId,
@@ -81,7 +111,20 @@ class LogbookController extends Controller
     public function edit_student($logId)
     {
         $entry = Logbook::findOrFail($logId);
-        return view('student.logbook.edit', compact('entry'));
+
+        // Calculate remaining annual leave
+        $student = Auth::user();
+        $entries = Logbook::where('stuId', $student->stuId)->get();
+        $annualLeaveTaken = 0;
+        foreach ($entries as $logbook) {
+            $attendance = json_decode($logbook->attendance, true);
+            $annualLeaveTaken += count(array_filter($attendance, function ($status) {
+                return $status === 'annual_leave';
+            }));
+        }
+        $remainingAnnualLeave = 12 - $annualLeaveTaken;
+
+        return view('student.logbook.edit', compact('entry', 'remainingAnnualLeave'));
     }
 
     public function update_student(Request $request, $logId)
@@ -98,7 +141,7 @@ class LogbookController extends Controller
             'problem_comment' => 'required',
             'status' => 'required|in:pending,approved',
         ], [
-            'proof.max' => 'The resume cannot exceed 5mb.',
+            'proof.max' => 'The proof file cannot exceed 5mb.',
         ]);
 
         // Encode attendance array to JSON
@@ -107,20 +150,38 @@ class LogbookController extends Controller
         // Find the Logbook instance by logId
         $entry = Logbook::findOrFail($logId);
 
+        // Determine if the proof file needs to be deleted
+        $deleteProof = false;
+        $attendanceTypes = array_values($data['attendance']);
+        foreach ($attendanceTypes as $type) {
+            if ($type == 'annual_leave' || $type == 'medical_leave') {
+                $deleteProof = false;
+                break;
+            } else {
+                $deleteProof = true;
+            }
+        }
+
+        if ($deleteProof && $entry->proof) {
+            // Delete old proof file if it exists
+            if (file_exists(public_path('proof/' . $entry->proof))) {
+                unlink(public_path('proof/' . $entry->proof));
+            }
+            $entry->proof = null;
+        }
+
         if ($request->hasFile('proof')) {
             // Handle file upload
             $file = $request->file('proof');
             $fileName = time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('proof'), $fileName);
 
-            // Delete old file
-            if (file_exists(public_path('proof/' . $entry->proof))) {
+            // Delete old proof file if it exists and a new file is uploaded
+            if ($entry->proof && file_exists(public_path('proof/' . $entry->proof))) {
                 unlink(public_path('proof/' . $entry->proof));
             }
 
-            Logbook::where('stuId', $entry->stuId)->update([
-                'proof' => $fileName,
-            ]);
+            $entry->proof = $fileName;
         }
 
         // Update all fields
@@ -139,6 +200,7 @@ class LogbookController extends Controller
         // Redirect with success message
         return redirect()->route('student.logbooks.index')->with('success', 'Logbook updated successfully.');
     }
+
 
     // Coach functions
     public function index_coach(Request $request)

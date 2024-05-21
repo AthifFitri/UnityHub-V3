@@ -39,53 +39,10 @@
                     </div>
 
                     {{-- Attendance --}}
-                    {{-- <div class="mb-4">
-                        <label class="block font-medium text-base text-gray-700">Attendance
-                            <p class="text-orange-500 text-xs mb-1">* If you choose Annual Leave or Medical Leave you have to upload your proof</p>
-                        </label>
-                        <div class="overflow-x-auto">
-                            <table class="w-full border">
-                                <thead class="bg-white">
-                                    <tr>
-                                        <th class="border px-2 py-1">Day</th>
-                                        <th class="border px-2 py-1">Present</th>
-                                        <th class="border px-2 py-1">Public Holiday</th>
-                                        <th class="border px-2 py-1">Annual Leave</th>
-                                        <th class="border px-2 py-1">Medical Leave</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-center">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <tr class="border">
-                                            <td class="border px-2 py-1">Day {{ $i }}</td>
-                                            <td class="border px-2 py-1">
-                                                <input type="radio" name="attendance[{{ $i }}]" value="present"
-                                                    @if (isset(json_decode($entry->attendance, true)[$i]) && json_decode($entry->attendance, true)[$i] === 'present') checked @endif required>
-                                            </td>
-                                            <td class="border px-2 py-1">
-                                                <input type="radio" name="attendance[{{ $i }}]"
-                                                    value="public_holiday" @if (isset(json_decode($entry->attendance, true)[$i]) && json_decode($entry->attendance, true)[$i] === 'public_holiday') checked @endif
-                                                    required>
-                                            </td>
-                                            <td class="border px-2 py-1">
-                                                <input type="radio" name="attendance[{{ $i }}]"
-                                                    value="annual_leave" @if (isset(json_decode($entry->attendance, true)[$i]) && json_decode($entry->attendance, true)[$i] === 'annual_leave') checked @endif
-                                                    required>
-                                            </td>
-                                            <td class="border px-2 py-1">
-                                                <input type="radio" name="attendance[{{ $i }}]"
-                                                    value="medical_leave" @if (isset(json_decode($entry->attendance, true)[$i]) && json_decode($entry->attendance, true)[$i] === 'medical_leave') checked @endif
-                                                    required>
-                                            </td>
-                                        </tr>
-                                    @endfor
-                                </tbody>
-                            </table>
-                        </div>
-                    </div> --}}
-
                     <div class="mb-4">
-                        <label for="attendance" class="block font-medium text-base text-gray-700">Attendance</label>
+                        <label for="attendance" class="block font-medium text-base text-gray-700">Attendance
+                            <p class="text-orange-500 text-xs mb-2">* You have to upload your proof when you choose Annual Leave / Medical Leave</p>
+                        </label>
                         <div class="overflow-x-auto">
                             <table class="w-full border">
                                 <thead>
@@ -107,9 +64,15 @@
                                                     <option value="public_holiday"
                                                         {{ isset(json_decode($entry->attendance, true)[$i]) && json_decode($entry->attendance, true)[$i] === 'public_holiday' ? 'selected' : '' }}>
                                                         Public Holiday</option>
+                                                    @php
+                                                        // Check if remainingAnnualLeave is greater than 0 to display the annual_leave option
+                                                        $disableAnnualLeave = $remainingAnnualLeave <= 0;
+                                                    @endphp
                                                     <option value="annual_leave"
-                                                        {{ isset(json_decode($entry->attendance, true)[$i]) && json_decode($entry->attendance, true)[$i] === 'annual_leave' ? 'selected' : '' }}>
-                                                        Annual Leave</option>
+                                                        {{ isset(json_decode($entry->attendance, true)[$i]) && json_decode($entry->attendance, true)[$i] === 'annual_leave' ? 'selected' : '' }}
+                                                        {{ $disableAnnualLeave ? 'disabled' : '' }}>
+                                                        Annual Leave
+                                                    </option>
                                                     <option value="medical_leave"
                                                         {{ isset(json_decode($entry->attendance, true)[$i]) && json_decode($entry->attendance, true)[$i] === 'medical_leave' ? 'selected' : '' }}>
                                                         Medical Leave</option>
@@ -123,7 +86,7 @@
                     </div>
 
                     {{-- Proof (If AL/MC choosen) --}}
-                    <div class="mb-4">
+                    <div class="mb-4" id="proofUpload">
                         <label for="proof" class="block font-medium text-base text-gray-700">Anual Leave/Medical
                             Certificate Proof
                             <p class="text-orange-500 text-xs mt-1">The maximum file size is 5mb</p>
@@ -183,40 +146,32 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Get all attendance select elements
                 const attendanceSelects = document.querySelectorAll('.attendance-select');
-                // Get the proof upload field
-                const proofUpload = document.getElementById('proofUpload');
-                // Hide the proof upload field by default
-                proofUpload.style.display = 'none';
+                const proofUploadDiv = document.getElementById('proofUpload');
+                const proofInput = document.getElementById('proof');
 
-                // Function to check attendance options
-                function checkAttendance() {
-                    let showProof = false;
+                function updateProofUploadVisibility() {
+                    let showProofUpload = false;
                     attendanceSelects.forEach(select => {
                         if (select.value === 'annual_leave' || select.value === 'medical_leave') {
-                            showProof = true;
+                            showProofUpload = true;
                         }
                     });
-                    proofUpload.style.display = showProof ? 'block' : 'none';
+                    proofUploadDiv.style.display = showProofUpload ? 'block' : 'none';
+                    if (!showProofUpload) {
+                        proofInput.value = ''; // Clear the input if hiding the proof upload
+                    }
                 }
 
-                // Add event listeners for change events on attendance selects
+                // Initialize visibility on page load
+                updateProofUploadVisibility();
+
+                // Add event listeners to each attendance select
                 attendanceSelects.forEach(select => {
                     select.addEventListener('change', function() {
-                        // Check if the selected attendance type requires proof
-                        checkAttendance();
-
-                        // If the selected attendance type is "Present" or "Public Holiday", hide the proof upload field
-                        const selectedValue = this.value;
-                        if (selectedValue === 'present' || selectedValue === 'public_holiday') {
-                            proofUpload.style.display = 'none';
-                        }
+                        updateProofUploadVisibility();
                     });
                 });
-
-                // Initially check attendance on page load
-                checkAttendance();
             });
         </script>
     @endsection

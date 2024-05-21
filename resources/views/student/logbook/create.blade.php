@@ -38,8 +38,7 @@
                     {{-- Attendance --}}
                     <div class="mb-4">
                         <label for="attendance" class="block font-medium text-base text-gray-700">Attendance
-                            <p class="text-orange-500 text-xs mb-1">* If you choose Annual Leave or Medical Leave you have
-                                to upload your proof</p>
+                            <p class="text-orange-500 text-xs mb-2">* You have to upload your proof when you choose Annual Leave / Medical Leave</p>
                         </label>
                         <div class="overflow-x-auto">
                             <table class="w-full border">
@@ -55,10 +54,12 @@
                                             <td class="border px-4 py-2">Day {{ $i }}</td>
                                             <td class="border px-4 py-2">
                                                 <select name="attendance[{{ $i }}]"
-                                                    class="attendance-select block w-full rounded-md p-2">
+                                                    class="attendance-select block w-full rounded-md p-2" required>
                                                     <option value="present">Present</option>
                                                     <option value="public_holiday">Public Holiday</option>
-                                                    <option value="annual_leave">Annual Leave</option>
+                                                    @if ($remainingAnnualLeave > 0)
+                                                        <option value="annual_leave">Annual Leave</option>
+                                                    @endif
                                                     <option value="medical_leave">Medical Leave</option>
                                                 </select>
                                             </td>
@@ -119,12 +120,27 @@
                     </a>
                 </div>
             </div>
-            
+
             </form>
         </div>
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startDateInput = document.getElementById('start_date');
+            const endDateInput = document.getElementById('end_date');
+
+            // Function to calculate end date based on start date
+            function calculateEndDate() {
+                const startDate = new Date(startDateInput.value);
+                const endDate = new Date(startDate.getTime() + (4 * 24 * 60 * 60 * 1000)); // Add 4 days
+                endDateInput.value = endDate.toISOString().split('T')[0];
+            }
+
+            // Add event listener for change event on start date input
+            startDateInput.addEventListener('change', calculateEndDate);
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             // Get all attendance select elements
             const attendanceSelects = document.querySelectorAll('.attendance-select');

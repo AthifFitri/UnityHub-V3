@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->string('attendance');
+            $table->binary('proof');
             $table->text('daily_activities');
             $table->text('knowledge_skill');
             $table->text('problem_comment');

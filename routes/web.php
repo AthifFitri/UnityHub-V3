@@ -2,11 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthManager;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\LogbookController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\EvaluateController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResumeController;
 
@@ -114,6 +116,17 @@ Route::middleware('auth:staff')->group(function () {
     Route::get('/coordinator/quiz/edit/{id}/{course}', [QuizController::class, 'edit_coordinator'])->name('coordinators.quizes.edit');
     Route::put('/coordinator/quiz/update/{id}/{course}', [QuizController::class, 'update_coordinator'])->name('coordinators.quizes.update');
 
+    // Module Manage Evaluation for Coordinator
+    Route::get('/coordinator/evaluation/index', [EvaluateController::class, 'index_coordinator'])->name('coordinators.evaluations.index');
+    Route::get('/coordinator/evaluation/createUniversity', [EvaluateController::class, 'create_university_coordinator'])->name('coordinators.evaluations.cretaeUniversity');
+
+    // Module Manage Course for Coordinator (features)
+    Route::get('/coordinator/course/index', [CourseController::class, 'index_coordinator'])->name('coordinators.courses.index');
+    Route::get('/coordinator/course/create', [CourseController::class, 'create_coordinator'])->name('coordinators.courses.create');
+    Route::post('/coordinator/course/index', [CourseController::class, 'store_coordinator'])->name('coordinators.courses.store');
+    Route::get('/coordinator/course/edit/{id}', [CourseController::class, 'edit_coordinator'])->name('coordinators.courses.edit');
+    Route::put('/coordinator/course/update/{id}', [CourseController::class, 'update_coordinator'])->name('coordinators.courses.update');
+    Route::delete('/coordinator/course/delete/{id}', [CourseController::class, 'destroy_coordinator'])->name('coordinators.courses.destroy');
 
     // Head of Program functions
     // Head of Program Dashboard

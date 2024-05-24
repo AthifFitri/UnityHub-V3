@@ -48,11 +48,17 @@
                     <li><a href="{{ route('coordinators.materials.index') }}"
                             class="hover:text-blue-400 @if (request()->routeIs('coordinators.materials.index')) font-semibold text-blue-400 @endif">Material</a>
                     </li>
+                    <li><a href="{{ route('coordinators.courses.index') }}"
+                            class="hover:text-blue-400 @if (request()->routeIs('coordinators.courses.index')) font-semibold text-blue-400 @endif">Course</a>
+                    </li>
                     <li><a href="{{ route('registers.index') }}"
                             class="hover:text-blue-400 @if (request()->routeIs('registers.index')) font-semibold text-blue-400 @endif">Coach</a>
                     </li>
                     <li><a href="{{ route('coordinators.quizes.index') }}"
                             class="hover:text-blue-400 @if (request()->routeIs('coordinators.quizes.index')) font-semibold text-blue-400 @endif">Quiz</a>
+                    </li>
+                    <li><a href="{{ route('coordinators.evaluations.index') }}"
+                            class="hover:text-blue-400 @if (request()->routeIs('coordinators.evaluations.index')) font-semibold text-blue-400 @endif">Evaluation</a>
                     </li>
 
                     {{-- Hop Navigation --}}

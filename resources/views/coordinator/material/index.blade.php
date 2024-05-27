@@ -12,7 +12,7 @@
 
         <div class="bg-gray-100 p-6 rounded-md shadow-md mt-4">
             @if (session('success'))
-                <div class="text-center bg-green-200 p-2 mb-4 mx-auto rounded-md ">
+                <div class="text-center bg-green-200 p-2 mb-4 mx-auto rounded-md">
                     {{ session('success') }}
                 </div>
             @endif

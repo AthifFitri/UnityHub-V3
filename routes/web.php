@@ -118,7 +118,15 @@ Route::middleware('auth:staff')->group(function () {
 
     // Module Manage Evaluation for Coordinator
     Route::get('/coordinator/evaluation/index', [EvaluateController::class, 'index_coordinator'])->name('coordinators.evaluations.index');
-    Route::get('/coordinator/evaluation/createUniversity', [EvaluateController::class, 'create_university_coordinator'])->name('coordinators.evaluations.cretaeUniversity');
+    Route::get('/coordinator/evaluation/createUniversity', [EvaluateController::class, 'create_university_coordinator'])->name('coordinators.evaluations.createUniversity');
+    Route::get('/coordinator/evaluation/createIndustry', [EvaluateController::class, 'create_industry_coordinator'])->name('coordinators.evaluations.createIndustry');
+    Route::post('/coordinator/evaluation/index', [EvaluateController::class, 'store_coordinator'])->name('coordinators.evaluations.store');
+    Route::get('/coordinator/evaluation/ploDetails/{evaId}', [EvaluateController::class, 'ploDetails_coordinator'])->name('coordinators.evaluations.ploDetails');
+    Route::get('/coordinator/evaluation/editCriteria/{evaCriId}', [EvaluateController::class, 'editCriteria_coordinator'])->name('coordinators.evaluations.editCriteria');
+    Route::put('/coordinator/evaluation/{evaCriId}', [EvaluateController::class, 'updateCriteria_coordinator'])->name('coordinators.evaluations.updateCriteria');
+    Route::get('coordinators/evaluations/addCriteria/{evaId}', [EvaluateController::class, 'addCriteria_coordinator'])->name('coordinators.evaluations.addCriteria');
+    Route::post('coordinators/evaluations/storeCriteria/{evaId}', [EvaluateController::class, 'storeCriteria_coordinator'])->name('coordinators.evaluations.storeCriteria');
+    Route::delete('/coordinator/evaluation/destroyCriteria/{evaCriId}', [EvaluateController::class, 'destroyCriteria_coordinator'])->name('coordinators.evaluations.destroyCriteria');
 
     // Module Manage Course for Coordinator (features)
     Route::get('/coordinator/course/index', [CourseController::class, 'index_coordinator'])->name('coordinators.courses.index');
@@ -127,6 +135,7 @@ Route::middleware('auth:staff')->group(function () {
     Route::get('/coordinator/course/edit/{id}', [CourseController::class, 'edit_coordinator'])->name('coordinators.courses.edit');
     Route::put('/coordinator/course/update/{id}', [CourseController::class, 'update_coordinator'])->name('coordinators.courses.update');
     Route::delete('/coordinator/course/delete/{id}', [CourseController::class, 'destroy_coordinator'])->name('coordinators.courses.destroy');
+
 
     // Head of Program functions
     // Head of Program Dashboard

@@ -15,4 +15,9 @@ class Course extends Model
         'courseCode',
         'courseName',
     ];
+
+    public function evaluations()
+    {
+        return $this->hasMany(Evaluation::class, 'courseId');
+    }
 }

@@ -45,4 +45,9 @@ class UniversityStaff extends Authenticatable
     {
         return $this->staffPassword;
     }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class, 'supervisor', 'staffId');
+    }
 }

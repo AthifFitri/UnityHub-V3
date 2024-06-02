@@ -39,6 +39,10 @@
                     <li><a href="{{ route('supervisors.materials.index') }}"
                             class="hover:text-blue-400 @if (request()->routeIs('supervisors.materials.index')) font-semibold text-blue-400 @endif">Material</a>
                     </li>
+                    <li><a href="{{ route('supervisors.logbooks.index') }}"
+                            class="hover:text-blue-400 @if (request()->routeIs('supervisors.logbooks.index')) font-semibold text-blue-400 @endif">Student
+                            Logbook</a>
+                    </li>
 
                     {{-- Coordinator Navigation --}}
                 @elseif ($position == 2)
@@ -50,6 +54,9 @@
                     </li>
                     <li><a href="{{ route('coordinators.courses.index') }}"
                             class="hover:text-blue-400 @if (request()->routeIs('coordinators.courses.index')) font-semibold text-blue-400 @endif">Course</a>
+                    </li>
+                    <li><a href="{{ route('coordinators.assessments.index') }}"
+                            class="hover:text-blue-400 @if (request()->routeIs('coordinators.assessments.index')) font-semibold text-blue-400 @endif">Assessment</a>
                     </li>
                     <li><a href="{{ route('registers.index') }}"
                             class="hover:text-blue-400 @if (request()->routeIs('registers.index')) font-semibold text-blue-400 @endif">Coach</a>

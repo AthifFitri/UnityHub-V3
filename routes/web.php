@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssessmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthManager;
 use App\Http\Controllers\CourseController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EvaluateController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResumeController;
+use App\Models\Assessment;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,6 +88,12 @@ Route::middleware('auth:staff')->group(function () {
     // Module Manage Material for Supervisor
     Route::get('/supervisor/material/index', [MaterialController::class, 'index_supervisor'])->name('supervisors.materials.index');
 
+    // Module Manage Logbook for Supervisor
+    Route::get('/supervisor/logbook/index', [LogbookController::class, 'index_supervisor'])->name('supervisors.logbooks.index');
+
+    // Module Manage Evaluation for Supervisor
+    Route::get('/supervisor/evaluation/logbookEvaluate/{stuId}', [EvaluateController::class, 'logbookEvaluate_supervisor'])->name('supervisors.evaluations.logbookEvaluate');
+
 
     // Coordinator functions
     // Coordinator Dashboard
@@ -127,6 +135,14 @@ Route::middleware('auth:staff')->group(function () {
     Route::get('coordinators/evaluations/addCriteria/{evaId}', [EvaluateController::class, 'addCriteria_coordinator'])->name('coordinators.evaluations.addCriteria');
     Route::post('coordinators/evaluations/storeCriteria/{evaId}', [EvaluateController::class, 'storeCriteria_coordinator'])->name('coordinators.evaluations.storeCriteria');
     Route::delete('/coordinator/evaluation/destroyCriteria/{evaCriId}', [EvaluateController::class, 'destroyCriteria_coordinator'])->name('coordinators.evaluations.destroyCriteria');
+
+    // Module Manage Assessment for Coordinator (features)
+    Route::get('/coordinator/assessment/index', [AssessmentController::class, 'index_coordinator'])->name('coordinators.assessments.index');
+    Route::get('/coordinator/assessment/create', [AssessmentController::class, 'create_coordinator'])->name('coordinators.assessments.create');
+    Route::post('/coordinator/assessment/index', [AssessmentController::class, 'store_coordinator'])->name('coordinators.assessments.store');
+    Route::get('/coordinator/assessment/edit/{assessId}', [AssessmentController::class, 'edit_coordinator'])->name('coordinators.assessments.edit');
+    Route::put('/coordinator/assessment/update/{assessId}', [AssessmentController::class, 'update_coordinator'])->name('coordinators.assessments.update');
+    Route::delete('/coordinator/assessment/delete/{assessId}', [AssessmentController::class, 'destroy_coordinator'])->name('coordinators.assessments.destroy');
 
     // Module Manage Course for Coordinator (features)
     Route::get('/coordinator/course/index', [CourseController::class, 'index_coordinator'])->name('coordinators.courses.index');

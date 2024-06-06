@@ -12,8 +12,9 @@ class Evaluation extends Model
     protected $primaryKey = 'evaId';
 
     protected $fillable = [
-        'evaType',
+        'assessor',
         'courseId',
+        'assessmentId',
         'plo',
     ];
 
@@ -25,5 +26,10 @@ class Evaluation extends Model
     public function course()
     {
         return $this->belongsTo(Course::class, 'courseId');
+    }
+
+    public function assessment()
+    {
+        return $this->belongsTo(Assessment::class, 'assessmentId');
     }
 }

@@ -43,6 +43,9 @@
                             class="hover:text-blue-400 @if (request()->routeIs('supervisors.logbooks.index')) font-semibold text-blue-400 @endif">Student
                             Logbook</a>
                     </li>
+                    <li><a href="{{ route('supervisors.evaluations.index') }}"
+                            class="hover:text-blue-400 @if (request()->routeIs('supervisors.evaluations.index')) font-semibold text-blue-400 @endif">Evaluation</a>
+                    </li>
 
                     {{-- Coordinator Navigation --}}
                 @elseif ($position == 2)

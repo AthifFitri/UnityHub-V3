@@ -32,14 +32,14 @@
                         @foreach ($assessments as $assessment)
                             <tr class="text-center">
                                 <td class="border px-4 py-2">{{ $loop->iteration }}</td>
-                                <td class="border px-4 py-2">{{ $assessment->assessName }}</td>
-                                <td class="border px-4 py-2">{{ $assessment->assessDescription ?? '-' }}</td>
+                                <td class="border px-4 py-2">{{ $assessment->assessmentName }}</td>
+                                <td class="border px-4 py-2">{{ $assessment->assessmentDescription ?? '-' }}</td>
                                 <td class="border px-4 py-2">
                                     <div class="flex justify-center space-x-5">
-                                        <a href="{{ route('coordinators.assessments.edit', $assessment->assessId) }}"
+                                        <a href="{{ route('coordinators.assessments.edit', $assessment->assessmentId) }}"
                                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</a>
                                         <form
-                                            action="{{ route('coordinators.assessments.destroy', $assessment->assessId) }}"
+                                            action="{{ route('coordinators.assessments.destroy', $assessment->assessmentId) }}"
                                             method="POST">
                                             @csrf
                                             @method('DELETE')

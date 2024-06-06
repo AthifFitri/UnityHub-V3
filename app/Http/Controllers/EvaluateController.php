@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Assessment;
 use App\Models\Course;
 use App\Models\Evaluation;
 use App\Models\EvaluationCriteria;
+use App\Models\EvaluationLogbook;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class EvaluateController extends Controller
@@ -17,37 +20,47 @@ class EvaluateController extends Controller
 
         // Loop through courses and fetch evaluations for each course
         foreach ($courses as $course) {
-            $course->evaluations = Evaluation::where('courseId', $course->courseId)->orderBy('plo')->get();
+            $course->evaluations = Evaluation::where('courseId', $course->courseId)
+                ->with(['assessment' => function ($query) {
+                    $query->orderBy('assessmentName');
+                }])
+                ->orderBy('plo')
+                ->get();
         }
 
         return view('coordinator.evaluation.index', compact('courses'));
     }
 
+
     public function create_university_coordinator()
     {
         $courses = Course::all();
-        return view('coordinator.evaluation.createUniversity', compact('courses'));
+        $assessments = Assessment::all();
+        return view('coordinator.evaluation.createUniversity', compact('courses', 'assessments'));
     }
 
     public function create_industry_coordinator()
     {
         $courses = Course::all();
-        return view('coordinator.evaluation.createIndustry', compact('courses'));
+        $assessments = Assessment::all();
+        return view('coordinator.evaluation.createIndustry', compact('courses', 'assessments'));
     }
 
     public function store_coordinator(Request $request)
     {
         $request->validate([
-            'evaType' => 'required|in:University,Industry',
+            'assessor' => 'required|in:University,Industry',
             'course' => 'required|exists:courses,courseId',
+            'assessment' => 'required|exists:assessments,assessmentId',
             'plo' => 'required|integer|min:1|max:9',
             'criteria.*' => 'required|string',
             'weight.*' => 'required|numeric|min:0|max:10',
         ]);
 
         $evaluation = Evaluation::create([
-            'evaType' => $request->input('evaType'),
+            'assessor' => $request->input('assessor'),
             'courseId' => $request->input('course'),
+            'assessmentId' => $request->input('assessment'),
             'plo' => $request->input('plo'),
         ]);
 
@@ -131,5 +144,88 @@ class EvaluateController extends Controller
         $criteria = EvaluationCriteria::findOrFail($evaCriId);
         $criteria->delete();
         return redirect()->back()->with('success', 'Criteria deleted successfully');
+    }
+
+    public function index_supervisor()
+    {
+        $students = Student::all();
+        return view('supervisor.evaluation.index', compact('students'));
+    }
+
+    public function logbookEvaluate_supervisor($stuId)
+    {
+        $student = Student::findOrFail($stuId);
+
+        $evaluationsCSM4908 = Evaluation::with('criteria')
+            ->whereHas('course', function ($query) {
+                $query->where('courseCode', 'CSM4908');
+            })
+            ->where('assessor', 'University')
+            ->whereHas('assessment', function ($query) {
+                $query->where('assessmentName', 'logbook');
+            })
+            ->get();
+
+        $criteriaCSM4908 = $evaluationsCSM4908->flatMap->criteria;
+
+        $ploCSM4908 = $evaluationsCSM4908->pluck('plo')->unique();
+
+        $evaluationsCSM4928 = Evaluation::with('criteria')
+            ->whereHas('course', function ($query) {
+                $query->where('courseCode', 'CSM4928');
+            })
+            ->where('assessor', 'University')
+            ->whereHas('assessment', function ($query) {
+                $query->where('assessmentName', 'logbook');
+            })
+            ->get();
+
+        $criteriaCSM4928 = $evaluationsCSM4928->flatMap->criteria;
+
+        $ploCSM4928 = $evaluationsCSM4928->pluck('plo')->unique();
+
+        $existingEvaluationsCSM4908 = EvaluationLogbook::where('stuId', $stuId)
+            ->whereIn('evaCriId', $criteriaCSM4908->pluck('evaCriId'))
+            ->get()
+            ->keyBy('evaCriId');
+
+        $existingEvaluationsCSM4928 = EvaluationLogbook::where('stuId', $stuId)
+            ->whereIn('evaCriId', $criteriaCSM4928->pluck('evaCriId'))
+            ->get()
+            ->keyBy('evaCriId');
+
+        return view('supervisor.evaluation.logbookEvaluate', compact(
+            'criteriaCSM4908',
+            'criteriaCSM4928',
+            'student',
+            'existingEvaluationsCSM4908',
+            'existingEvaluationsCSM4928',
+            'ploCSM4908',
+            'ploCSM4928'
+        ));
+    }
+
+    public function logbookEvaluate_store_supervisor(Request $request, $stuId)
+    {
+        $request->validate([
+            'criteria' => 'required|array',
+            'criteria.*' => 'required|numeric|min:0|max:5',
+        ]);
+
+        $student = Student::findOrFail($stuId);
+
+        foreach ($request->input('criteria') as $evaCriId => $score) {
+            EvaluationLogbook::updateOrCreate(
+                [
+                    'stuId' => $student->stuId,
+                    'evaCriId' => $evaCriId,
+                ],
+                [
+                    'logScore' => $score,
+                ]
+            );
+        }
+
+        return redirect()->back()->with('success', 'Evaluation scores saved successfully.');
     }
 }

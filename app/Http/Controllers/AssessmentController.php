@@ -22,43 +22,43 @@ class AssessmentController extends Controller
     public function store_coordinator(Request $request)
     {
         $request->validate([
-            'assessName' => 'required|string|max:255',
-            'assessDescription' => 'nullable|string|max:255',
+            'assessmentName' => 'required|string|max:255',
+            'assessmentDescription' => 'nullable|string|max:255',
         ]);
 
         Assessment::create([
-            'assessName' => $request->input('assessName'),
-            'assessDescription' => $request->input('assessDescription'),
+            'assessmentName' => $request->input('assessmentName'),
+            'assessmentDescription' => $request->input('assessmentDescription'),
         ]);
 
         return redirect()->route('coordinators.assessments.index')->with('success', 'Assessment created successfully!');
     }
 
-    public function edit_coordinator($assessId)
+    public function edit_coordinator($assessmentId)
     {
-        $assessment = Assessment::findOrFail($assessId);
+        $assessment = Assessment::findOrFail($assessmentId);
         return view('coordinator.assessment.edit', compact('assessment'));
     }
 
-    public function update_coordinator(Request $request, $assessId)
+    public function update_coordinator(Request $request, $assessmentId)
     {
         $request->validate([
-            'assessName' => 'required|string|max:255',
-            'assessDescription' => 'nullable|string|max:255',
+            'assessmentName' => 'required|string|max:255',
+            'assessmentDescription' => 'nullable|string|max:255',
         ]);
 
-        $assessment = Assessment::findOrFail($assessId);
+        $assessment = Assessment::findOrFail($assessmentId);
         $assessment->update([
-            'assessName' => $request->input('assessName'),
-            'assessDescription' => $request->input('assessDescription'),
+            'assessmentName' => $request->input('assessmentName'),
+            'assessmentDescription' => $request->input('assessmentDescription'),
         ]);
 
         return redirect()->route('coordinators.assessments.index')->with('success', 'Assessment updated successfully!');
     }
 
-    public function destroy_coordinator($assessId)
+    public function destroy_coordinator($assessmentId)
     {
-        $assessment = Assessment::findOrFail($assessId);
+        $assessment = Assessment::findOrFail($assessmentId);
         $assessment->delete();
 
         return redirect()->route('coordinators.assessments.index')->with('success', 'Assessment deleted successfully!');

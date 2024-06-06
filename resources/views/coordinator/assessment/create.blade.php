@@ -11,13 +11,14 @@
                 @csrf
 
                 <div class="mb-4">
-                    <label for="assessName" class="block font-medium text-base text-gray-700">Assessment Name</label>
-                    <textarea name="assessName" id="assessName" rows="2" class="block w-full rounded-md p-1" required></textarea>
+                    <label for="assessmentName" class="block font-medium text-base text-gray-700">Assessment Name</label>
+                    <textarea name="assessmentName" id="assessmentName" rows="2" class="block w-full rounded-md p-1" required></textarea>
                 </div>
 
                 <div class="mb-4">
-                    <label for="assessDescription" class="block font-medium text-base text-gray-700">Assessment Description</label>
-                    <textarea name="assessDescription" id="assessDescription" rows="4" class="block w-full rounded-md p-1"></textarea>
+                    <label for="assessmentDescription" class="block font-medium text-base text-gray-700">Assessment
+                        Description</label>
+                    <textarea name="assessmentDescription" id="assessmentDescription" rows="4" class="block w-full rounded-md p-1"></textarea>
                 </div>
 
                 <div class="flex items-center justify-center mt-4">

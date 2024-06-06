@@ -201,7 +201,6 @@ class LogbookController extends Controller
         return redirect()->route('student.logbooks.index')->with('success', 'Logbook updated successfully.');
     }
 
-
     // Coach functions
     public function index_coach(Request $request)
     {
@@ -240,5 +239,34 @@ class LogbookController extends Controller
         // Redirect to the logbook index page of the coach
         return redirect()->route('coaches.logbooks.index', ['stuId' => $studentId])
             ->with('success', 'Logbook status updated successfully.');
+    }
+
+    // Supervisor Univeristy functions
+    public function index_supervisor(Request $request)
+    {
+        // Get the authenticated supervisor
+        $supervisor = Auth::user();
+
+        // Retrieve all students associated with the supervisor
+        $students = $supervisor->students;
+
+        // Initialize entries to an empty collection
+        $entries = collect();
+
+        // Check if a student is selected
+        if ($request->has('stuId')) {
+            // Get the selected student ID
+            $selectedStudentId = $request->stuId;
+
+            // Check if the selected student is associated with the supervisor
+            if ($students->where('stuId', $selectedStudentId)->isNotEmpty()) {
+                // Retrieve logbook entries for the selected student with status 'approved'
+                $entries = Logbook::where('stuId', $selectedStudentId)
+                    ->where('status', 'approved')
+                    ->get();
+            }
+        }
+
+        return view('supervisor.logbook.index', compact('entries', 'students'));
     }
 }

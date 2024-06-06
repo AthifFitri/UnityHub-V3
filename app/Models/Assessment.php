@@ -9,15 +9,17 @@ class Assessment extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'assessId';
+    protected $table = 'assessments';
+
+    protected $primaryKey = 'assessmentId';
 
     protected $fillable = [
-        'assessName',
-        'assessDescription',
+        'assessmentName',
+        'assessmentDescription',
     ];
 
-    public function essessmentType()
+    public function assessmentType()
     {
-        return $this->hasMany(Evaluation::class, 'assessId');
+        return $this->hasMany(Evaluation::class, 'assessmentId');
     }
 }

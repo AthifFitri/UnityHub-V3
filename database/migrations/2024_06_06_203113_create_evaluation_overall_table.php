@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assessments', function (Blueprint $table) {
-            $table->id('assessmentId');
-            $table->string('assessmentName');
-            $table->string('assessmentDescription')->nullable();
+        Schema::create('evaluation_overall', function (Blueprint $table) {
+            $table->id('evaOverallId');
+            $table->enum('assessorType', ['University', 'Industry']);
+            $table->unsignedBigInteger('stuId');
+            $table->unsignedBigInteger('assessmentId');
+            $table->unsignedBigInteger('assessmentId');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('assessments');
+        Schema::dropIfExists('evaluation_overall');
     }
 };

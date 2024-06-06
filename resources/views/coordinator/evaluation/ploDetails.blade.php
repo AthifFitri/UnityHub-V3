@@ -14,21 +14,18 @@
             @endif
             <div class="flex justify-between mb-4">
                 <div>
-                    @if ($evaluation->course)
-                        <div class="flex flex-row">
-                            <p class="font-semibold text-base text-gray-700 mr-2">Course :</p>
-                            <p class="text-blue-500 font-medium text-base">{{ $evaluation->course->courseCode }} -
-                                {{ $evaluation->course->courseName }}</p>
-                        </div>
-                    @else
-                        <div class="flex flex-row">
-                            <p class="font-semibold text-base text-gray-700 mr-2">Course :</p>
-                            <p class="text-red-500 font-medium text-base">Course not found</p>
-                        </div>
-                    @endif
+                    <div class="flex flex-row">
+                        <p class="font-semibold text-base text-gray-700 mr-2">Course :</p>
+                        <p class="text-blue-500 font-medium text-base">{{ $evaluation->course->courseCode }} -
+                            {{ $evaluation->course->courseName }}</p>
+                    </div>
                     <div class="flex flex-row">
                         <p class="font-semibold text-base text-gray-700 mr-2">Evaluation Type :</p>
                         <p class="text-blue-500 font-medium text-base">{{ $evaluation->evaType }} Evaluation</p>
+                    </div>
+                    <div class="flex flex-row">
+                        <p class="font-semibold text-base text-gray-700 mr-2">Assessment Type :</p>
+                        <p class="text-blue-500 font-medium text-base">{{ $evaluation->assessment->assessmentName }}</p>
                     </div>
                     <div class="flex flex-row items-center">
                         <p class="font-semibold text-base text-gray-700 mr-2">Program Learning Outcome (PLO) :</p>
@@ -47,6 +44,7 @@
                         <th class="border px-4 py-2">No.</th>
                         <th class="border px-4 py-2">Criteria</th>
                         <th class="border px-4 py-2">Weight</th>
+                        <th class="border px-4 py-2">Max Mark</th>
                         <th class="border px-4 py-2">Action</th>
                     </tr>
                 </thead>
@@ -54,8 +52,9 @@
                     @foreach ($evaluation->criteria as $index => $criteria)
                         <tr class="text-center">
                             <td class="border px-4 py-2">{{ $index + 1 }}</td>
-                            <td class="border px-4 py-2">{{ $criteria->criteria }}</td>
-                            <td class="border px-4 py-2">{{ $criteria->weight }}</td>
+                            <td class="border px-4 py-2 text-left">{{ $criteria->criteria }}</td>
+                            <td class="border px-4 py-2">{{ number_format($criteria->weight, 2) }}</td>
+                            <td class="border px-4 py-2">{{ number_format($criteria->weight * 5, 2) }}</td>
                             <td class="border px-4 py-2">
                                 <div class="flex justify-center space-x-5">
                                     <a href="{{ route('coordinators.evaluations.editCriteria', $criteria->evaCriId) }}"
@@ -74,6 +73,23 @@
                         </tr>
                     @endforeach
                 </tbody>
+                <tr>
+                    <td class="bg-gray-400 text-white font-bold text-right border px-4 py-2" colspan="2">Total Weight /
+                        Max Mark
+                    </td>
+                    <td class="bg-gray-300 text-center font-bold border px-4 py-2">
+                        {{ number_format($evaluation->criteria->sum('weight'), 2) }}
+                    </td>
+                    <td class="bg-gray-300 text-center font-bold border px-4 py-2">
+                        {{ number_format(
+                            $evaluation->criteria->sum(function ($criteria) {
+                                return $criteria->weight * 5;
+                            }),
+                            2,
+                        ) }}
+                    </td>
+                    <td class="bg-gray-400 border px-4 py-2"></td>
+                </tr>
             </table>
 
             <div class="flex items-center justify-end mt-4">

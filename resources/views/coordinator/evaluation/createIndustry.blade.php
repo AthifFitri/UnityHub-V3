@@ -10,7 +10,7 @@
             <form action="{{ route('coordinators.evaluations.store') }}" method="POST">
                 @csrf
 
-                <input type="hidden" name="evaType" value="Industry">
+                <input type="hidden" name="assessor" value="Industry">
 
                 <div class="mb-4">
                     <label for="course" class="block font-medium text-base text-gray-700">Course</label>
@@ -20,6 +20,19 @@
                         <option value="" disabled selected>Select Course</option>
                         @foreach ($courses as $course)
                             <option value="{{ $course->courseId }}">{{ $course->courseCode }} - {{ $course->courseName }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="assessment" class="block font-medium text-base text-gray-700">Assessment</label>
+                    <select name="assessment" id="course"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                        required>
+                        <option value="" disabled selected>Select Assessment</option>
+                        @foreach ($assessments as $assessment)
+                            <option value="{{ $assessment->assessmentId }}">{{ $assessment->assessmentName }}
                             </option>
                         @endforeach
                     </select>

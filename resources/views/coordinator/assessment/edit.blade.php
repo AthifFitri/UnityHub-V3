@@ -7,19 +7,19 @@
         </div>
 
         <div class="max-w-md mx-auto bg-slate-300 p-6 rounded-md shadow-md">
-            <form action="{{ route('coordinators.assessments.update', $assessment->assessId) }}" method="POST">
+            <form action="{{ route('coordinators.assessments.update', $assessment->assessmentId) }}" method="POST">
                 @csrf
                 @method('PUT')
 
                 <div class="mb-4">
-                    <label for="assessName" class="block font-medium text-base text-gray-700">Assessment Name</label>
-                    <textarea name="assessName" id="assessName" rows="2" class="block w-full rounded-md p-1" required>{{ $assessment->assessName }}</textarea>
+                    <label for="assessmentName" class="block font-medium text-base text-gray-700">Assessment Name</label>
+                    <textarea name="assessmentName" id="assessmentName" rows="2" class="block w-full rounded-md p-1" required>{{ $assessment->assessmentName }}</textarea>
                 </div>
 
                 <div class="mb-4">
-                    <label for="assessDescription" class="block font-medium text-base text-gray-700">Assessment
+                    <label for="assessmentDescription" class="block font-medium text-base text-gray-700">Assessment
                         Description</label>
-                    <textarea name="assessDescription" id="assessDescription" rows="4" class="block w-full rounded-md p-1">{{ $assessment->assessDescription }}</textarea>
+                    <textarea name="assessmentDescription" id="assessmentDescription" rows="4" class="block w-full rounded-md p-1">{{ $assessment->assessmentDescription }}</textarea>
                 </div>
 
                 <div class="flex items-center justify-center mt-4">

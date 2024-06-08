@@ -49,13 +49,26 @@
                                             {{ $evaluations->first()->assessment->assessmentName }}</h4>
                                         <div class="grid grid-cols-3 gap-4">
                                             @foreach ($evaluations as $evaluation)
-                                                <a href="{{ route('coordinators.evaluations.ploDetails', $evaluation->evaId) }}"
-                                                    class="block bg-blue-100 rounded-lg p-4 transition duration-300 ease-in-out transform hover:scale-105 hover:bg-blue-200 relative group cursor-pointer">
-                                                    <h2 class="text-md font-semibold mb-2 text-blue-800">
-                                                        PLO{{ $evaluation->plo }}</h2>
-                                                    <p class="text-sm text-blue-600">Click to see the
-                                                        PLO{{ $evaluation->plo }} details</p>
-                                                </a>
+                                                <div class="relative group">
+                                                    <a href="{{ route('coordinators.evaluations.ploDetails', $evaluation->evaId) }}"
+                                                        class="block bg-blue-100 rounded-lg p-4 transition duration-300 ease-in-out transform group-hover:scale-105 hover:bg-blue-200 cursor-pointer">
+                                                        <h2 class="text-md font-semibold mb-2 text-blue-800">
+                                                            PLO{{ $evaluation->plo }}</h2>
+                                                        <p class="text-sm text-blue-600">Click to see the
+                                                            PLO{{ $evaluation->plo }} details</p>
+                                                    </a>
+                                                    <div class="absolute top-2 right-2 hidden group-hover:flex">
+                                                        <form
+                                                            action="{{ route('coordinators.evaluations.destroyPlo', $evaluation->evaId) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit"
+                                                                class="bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md"
+                                                                onclick="return confirm('Are you sure you want to delete this plo?');">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             @endforeach
                                         </div>
                                     </div>
@@ -67,27 +80,40 @@
                             @php
                                 $industryEvaluations = $course->evaluations
                                     ->where('assessor', 'Industry')
-                                    ->groupBy('assessId');
+                                    ->groupBy('assessmentId');
                                 $sortedIndustryEvaluations = $industryEvaluations->sortBy(
-                                    fn($group, $key) => $group->first()->assessment->assessName,
+                                    fn($group, $key) => $group->first()->assessment->assessmentName,
                                 );
                             @endphp
                             @if ($sortedIndustryEvaluations->isEmpty())
                                 <p class="text-gray-500">No assessment created.</p>
                             @else
-                                @foreach ($sortedIndustryEvaluations as $assessId => $evaluations)
+                                @foreach ($sortedIndustryEvaluations as $assessmentId => $evaluations)
                                     <div class="mb-4 p-4 bg-green-50 border-l-4 border-green-300 rounded-lg">
                                         <h4 class="text-md font-semibold text-gray-600 mb-2">
-                                            {{ $evaluations->first()->assessment->assessName }}</h4>
+                                            {{ $evaluations->first()->assessment->assessmentName }}</h4>
                                         <div class="grid grid-cols-3 gap-4">
                                             @foreach ($evaluations as $evaluation)
-                                                <a href="{{ route('coordinators.evaluations.ploDetails', $evaluation->evaId) }}"
-                                                    class="block bg-green-100 rounded-lg p-4 transition duration-300 ease-in-out transform hover:scale-105 hover:bg-green-200 relative group cursor-pointer">
-                                                    <h2 class="text-md font-semibold mb-2 text-green-800">
-                                                        PLO{{ $evaluation->plo }}</h2>
-                                                    <p class="text-sm text-green-600">Click to see the
-                                                        PLO{{ $evaluation->plo }} details</p>
-                                                </a>
+                                                <div class="relative group">
+                                                    <a href="{{ route('coordinators.evaluations.ploDetails', $evaluation->evaId) }}"
+                                                        class="block bg-green-100 rounded-lg p-4 transition duration-300 ease-in-out transform group-hover:scale-105 hover:bg-green-200 cursor-pointer">
+                                                        <h2 class="text-md font-semibold mb-2 text-green-800">
+                                                            PLO{{ $evaluation->plo }}</h2>
+                                                        <p class="text-sm text-green-600">Click to see the
+                                                            PLO{{ $evaluation->plo }} details</p>
+                                                    </a>
+                                                    <div class="absolute top-2 right-2 hidden group-hover:flex">
+                                                        <form
+                                                            action="{{ route('coordinators.evaluations.destroyPlo', $evaluation->evaId) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit"
+                                                                class="bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md"
+                                                                onclick="return confirm('Are you sure you want to delete this plo?');">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             @endforeach
                                         </div>
                                     </div>

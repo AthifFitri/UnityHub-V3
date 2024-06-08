@@ -7,9 +7,12 @@ use App\Models\Assessment;
 use App\Models\Course;
 use App\Models\Evaluation;
 use App\Models\EvaluationCriteria;
+use App\Models\EvaluationDocument;
+use App\Models\EvaluationFinalPresent;
 use App\Models\EvaluationLogbook;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EvaluateController extends Controller
 {
@@ -139,6 +142,15 @@ class EvaluateController extends Controller
             ->with('success', 'Criteria added successfully.');
     }
 
+    public function destroyPlo_coordinator($evaId)
+    {
+        $evaluation = Evaluation::findOrFail($evaId);
+        $evaluation->criteria()->delete();
+        $evaluation->delete();
+
+        return redirect()->back()->with('success', 'PLO deleted successfully');
+    }
+
     public function destroyCriteria_coordinator($evaCriId)
     {
         $criteria = EvaluationCriteria::findOrFail($evaCriId);
@@ -227,5 +239,104 @@ class EvaluateController extends Controller
         }
 
         return redirect()->back()->with('success', 'Evaluation scores saved successfully.');
+    }
+
+    public function documentEvaluate_supervisor($stuId)
+    {
+        $student = Student::findOrFail($stuId);
+
+        $evaluations = Evaluation::with(['criteria', 'course'])
+            ->where('assessor', 'University')
+            ->whereHas('assessment', function ($query) {
+                $query->where('assessmentName', 'project documentation');
+            })
+            ->get();
+
+        $plos = $evaluations->pluck('plo')->unique();
+
+        $evaluationsGrouped = $evaluations->groupBy('course.courseCode');
+
+        $existingEvaluations = EvaluationDocument::where('stuId', $stuId)
+            ->get()
+            ->keyBy('evaCriId');
+
+        return view('supervisor.evaluation.documentEvaluate', compact(
+            'student',
+            'plos',
+            'evaluationsGrouped',
+            'existingEvaluations'
+        ));
+    }
+
+    public function documentEvaluate_store_supervisor(Request $request, $stuId)
+    {
+        $request->validate([
+            'criteria' => 'required|array',
+            'criteria.*' => 'required|numeric|min:0|max:5',
+        ]);
+
+        $student = Student::findOrFail($stuId);
+
+        foreach ($request->input('criteria') as $evaCriId => $score) {
+            EvaluationDocument::updateOrCreate(
+                [
+                    'stuId' => $student->stuId,
+                    'evaCriId' => $evaCriId,
+                ],
+                [
+                    'docScore' => $score,
+                ]
+            );
+        }
+
+        return redirect()->back()->with('success', 'Evaluation scores saved successfully.');
+    }
+
+    public function presentationEvaluate_supervisor(Request $request)
+    {
+        $supervisor = Auth::user();
+        $students = $supervisor->students;
+
+        $evaluations = Evaluation::with(['criteria', 'course'])
+            ->where('assessor', 'University')
+            ->whereHas('assessment', function ($query) {
+                $query->where('assessmentName', 'final presentation');
+            })
+            ->get();
+
+        $evaluationsGrouped = $evaluations->groupBy('course.courseCode');
+
+        $plosByCourse = [];
+        foreach ($evaluationsGrouped as $courseCode => $evaluations) {
+            $plosByCourse[$courseCode] = $evaluations->pluck('plo')->unique();
+        }
+
+        $existingEvaluations = EvaluationFinalPresent::whereIn('stuId', $students->pluck('stuId'))
+            ->get()
+            ->groupBy('stuId');
+
+        return view('supervisor.evaluation.presentationEvaluate', compact('students', 'evaluationsGrouped', 'plosByCourse', 'existingEvaluations'));
+    }
+
+    public function presentationEvaluate_store_supervisor(Request $request)
+    {
+        $stuId = $request->input('stuId');
+        $criteria = $request->input('criteria');
+        $plo = $request->input('plo');
+
+        foreach ($criteria as $evaCriId => $score) {
+            EvaluationFinalPresent::updateOrCreate(
+                [
+                    'stuId' => $stuId,
+                    'plo' => $plo,
+                    'evaCriId' => $evaCriId
+                ],
+                [
+                    'finalPresentScore' => $score
+                ]
+            );
+        }
+
+        return redirect()->route('supervisors.evaluations.presentationEvaluate', ['stuId' => $stuId])->with('success', 'Evaluation updated successfully');
     }
 }

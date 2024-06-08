@@ -20,8 +20,8 @@
                             {{ $evaluation->course->courseName }}</p>
                     </div>
                     <div class="flex flex-row">
-                        <p class="font-semibold text-base text-gray-700 mr-2">Evaluation Type :</p>
-                        <p class="text-blue-500 font-medium text-base">{{ $evaluation->evaType }} Evaluation</p>
+                        <p class="font-semibold text-base text-gray-700 mr-2">Assessor Type :</p>
+                        <p class="text-blue-500 font-medium text-base">{{ $evaluation->assessor }} Evaluation</p>
                     </div>
                     <div class="flex flex-row">
                         <p class="font-semibold text-base text-gray-700 mr-2">Assessment Type :</p>
@@ -52,7 +52,7 @@
                     @foreach ($evaluation->criteria as $index => $criteria)
                         <tr class="text-center">
                             <td class="border px-4 py-2">{{ $index + 1 }}</td>
-                            <td class="border px-4 py-2 text-left">{{ $criteria->criteria }}</td>
+                            <td class="border px-4 py-2 text-left w-1/2">{{ $criteria->criteria }}</td>
                             <td class="border px-4 py-2">{{ number_format($criteria->weight, 2) }}</td>
                             <td class="border px-4 py-2">{{ number_format($criteria->weight * 5, 2) }}</td>
                             <td class="border px-4 py-2">

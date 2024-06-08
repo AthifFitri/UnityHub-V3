@@ -145,4 +145,21 @@ class DocumentController extends Controller
 
         return redirect()->route('student.documents.index')->with('success', 'Document deleted successfully!');
     }
+
+    public function index_supervisor(Request $request)
+    {
+        $supervisor = Auth::user();
+        $students = $supervisor->students;
+
+        $selectedStudentId = $request->input('stuId');
+        $documentTypes = $this->getDocumentTypes();
+
+        if ($selectedStudentId) {
+            $documents = Document::where('stuId', $selectedStudentId)->get();
+        } else {
+            $documents = collect();
+        }
+
+        return view('supervisor.documentation.index', compact('documents', 'documentTypes', 'students', 'selectedStudentId'));
+    }
 }

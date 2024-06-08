@@ -91,10 +91,17 @@ Route::middleware('auth:staff')->group(function () {
     // Module Manage Logbook for Supervisor
     Route::get('/supervisor/logbook/index', [LogbookController::class, 'index_supervisor'])->name('supervisors.logbooks.index');
 
+    // Module Manage Documentation for Supervisor
+    Route::get('/supervisor/documentation/index', [DocumentController::class, 'index_supervisor'])->name('supervisors.documents.index');
+
     // Module Manage Evaluation for Supervisor
     Route::get('/supervisor/evaluation/index', [EvaluateController::class, 'index_supervisor'])->name('supervisors.evaluations.index');
     Route::get('/supervisor/evaluation/logbookEvaluate/{stuId}', [EvaluateController::class, 'logbookEvaluate_supervisor'])->name('supervisors.evaluations.logbookEvaluate');
     Route::post('/supervisor/evaluation/logbookEvaluate/{stuId}', [EvaluateController::class, 'logbookEvaluate_store_supervisor'])->name('supervisors.evaluations.logbookEvaluate.store');
+    Route::get('/supervisor/evaluation/documentEvaluate/{stuId}', [EvaluateController::class, 'documentEvaluate_supervisor'])->name('supervisors.evaluations.documentEvaluate');
+    Route::post('/supervisor/evaluation/documentEvaluate/{stuId}', [EvaluateController::class, 'documentEvaluate_store_supervisor'])->name('supervisors.evaluations.documentEvaluate.store');
+    Route::get('/supervisor/evaluation/presentationEvaluate', [EvaluateController::class, 'presentationEvaluate_supervisor'])->name('supervisors.evaluations.presentationEvaluate');
+    Route::post('/supervisor/evaluation/presentationEvaluate', [EvaluateController::class, 'presentationEvaluate_store_supervisor'])->name('supervisors.evaluations.presentationEvaluate.store');
 
 
     // Coordinator functions
@@ -136,6 +143,7 @@ Route::middleware('auth:staff')->group(function () {
     Route::put('/coordinator/evaluation/{evaCriId}', [EvaluateController::class, 'updateCriteria_coordinator'])->name('coordinators.evaluations.updateCriteria');
     Route::get('coordinators/evaluations/addCriteria/{evaId}', [EvaluateController::class, 'addCriteria_coordinator'])->name('coordinators.evaluations.addCriteria');
     Route::post('coordinators/evaluations/storeCriteria/{evaId}', [EvaluateController::class, 'storeCriteria_coordinator'])->name('coordinators.evaluations.storeCriteria');
+    Route::delete('/coordinator/evaluation/destroyPlo/{evaId}', [EvaluateController::class, 'destroyPlo_coordinator'])->name('coordinators.evaluations.destroyPlo');
     Route::delete('/coordinator/evaluation/destroyCriteria/{evaCriId}', [EvaluateController::class, 'destroyCriteria_coordinator'])->name('coordinators.evaluations.destroyCriteria');
 
     // Module Manage Assessment for Coordinator (features)

@@ -39,9 +39,24 @@
                     <li><a href="{{ route('supervisors.materials.index') }}"
                             class="hover:text-blue-400 @if (request()->routeIs('supervisors.materials.index')) font-semibold text-blue-400 @endif">Material</a>
                     </li>
-                    <li><a href="{{ route('supervisors.logbooks.index') }}"
-                            class="hover:text-blue-400 @if (request()->routeIs('supervisors.logbooks.index')) font-semibold text-blue-400 @endif">Student
-                            Logbook</a>
+                    <li class="relative">
+                        <a href="#" id="studentDropdown"
+                            class="hover:text-blue-400 @if (request()->routeIs('supervisors.documents.index') || request()->routeIs('supervisors.logbooks.index')) font-semibold text-blue-400 @endif">Student Evaluation</a>
+                        <ul class="absolute left-0 hidden mt-2 bg-white border border-gray-200 rounded-md shadow-lg"
+                            id="studentMenu">
+                            <li>
+                                <a href="{{ route('supervisors.documents.index') }}"
+                                    class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('supervisors.documents.index')) font-semibold text-blue-400 @endif">Documentation</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('supervisors.logbooks.index') }}"
+                                    class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('supervisors.logbooks.index')) font-semibold text-blue-400 @endif">Logbook</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('supervisors.evaluations.presentationEvaluate') }}"
+                                    class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('supervisors.evaluations.presentationEvaluate')) font-semibold text-blue-400 @endif">Presentation</a>
+                            </li>
+                        </ul>
                     </li>
                     <li><a href="{{ route('supervisors.evaluations.index') }}"
                             class="hover:text-blue-400 @if (request()->routeIs('supervisors.evaluations.index')) font-semibold text-blue-400 @endif">Evaluation</a>
@@ -89,9 +104,16 @@
                 <li><a href="{{ route('coaches.materials.index') }}"
                         class="hover:text-blue-400 @if (request()->routeIs('coaches.materials.index')) font-semibold text-blue-400 @endif">Material</a>
                 </li>
-                <li><a href="{{ route('coaches.logbooks.index') }}"
-                        class="hover:text-blue-400 @if (request()->routeIs('coaches.logbooks.index')) font-semibold text-blue-400 @endif">Student
-                        Logbook</a>
+                <li class="relative">
+                    <a href="#" id="studentDropdown"
+                        class="hover:text-blue-400 @if (request()->routeIs('coaches.logbooks.index')) font-semibold text-blue-400 @endif">Student</a>
+                    <ul class="absolute left-0 hidden mt-2 bg-white border border-gray-200 rounded-md shadow-lg"
+                        id="studentMenu">
+                        <li>
+                            <a href="{{ route('coaches.logbooks.index') }}"
+                                class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.logbooks.index')) font-semibold text-blue-400 @endif">Logbook</a>
+                        </li>
+                    </ul>
                 </li>
                 <li><a href="{{ route('coaches.resume.index') }}"
                         class="hover:text-blue-400 @if (request()->routeIs('coaches.resume.index')) font-semibold text-blue-400 @endif">Resume</a>
@@ -184,7 +206,8 @@
                     <div class="relative">
                         <button id="profileDropdown"
                             class="hover:text-blue-400">{{ auth('coach')->user()->coachName }}</button>
-                        <ul id="dropdownMenu" class="absolute hidden right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+                        <ul id="dropdownMenu"
+                            class="absolute hidden right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
                             <li><a href="{{ route('coaches.profile.index') }}"
                                     class="block px-4 py-2 text-gray-800 hover:bg-gray-200 hover:text-blue-400">Profile</a>
                             </li>
@@ -203,15 +226,35 @@
         document.addEventListener("DOMContentLoaded", function() {
             var profileDropdown = document.getElementById("profileDropdown");
             var dropdownMenu = document.getElementById("dropdownMenu");
+            var studentDropdown = document.getElementById("studentDropdown");
+            var studentMenu = document.getElementById("studentMenu");
 
-            profileDropdown.addEventListener("click", function(event) {
-                dropdownMenu.classList.toggle("hidden");
+            // Function to toggle dropdown visibility
+            function toggleDropdown(event, menu) {
+                menu.classList.toggle("hidden");
                 event.stopPropagation();
-            });
+            }
 
+            // Event listeners for dropdown buttons
+            if (profileDropdown && dropdownMenu) {
+                profileDropdown.addEventListener("click", function(event) {
+                    toggleDropdown(event, dropdownMenu);
+                });
+            }
+
+            if (studentDropdown && studentMenu) {
+                studentDropdown.addEventListener("click", function(event) {
+                    toggleDropdown(event, studentMenu);
+                });
+            }
+
+            // Clicking outside the dropdowns closes them
             document.addEventListener("click", function(event) {
-                if (!profileDropdown.contains(event.target)) {
+                if (dropdownMenu && !profileDropdown.contains(event.target)) {
                     dropdownMenu.classList.add("hidden");
+                }
+                if (studentMenu && !studentDropdown.contains(event.target)) {
+                    studentMenu.classList.add("hidden");
                 }
             });
         });

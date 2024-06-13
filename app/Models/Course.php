@@ -12,9 +12,15 @@ class Course extends Model
     protected $primaryKey = 'courseId';
 
     protected $fillable = [
+        'sessionId',
         'courseCode',
         'courseName',
     ];
+
+    public function session()
+    {
+        return $this->belongsTo(Session::class, 'sessionId');
+    }
 
     public function evaluations()
     {

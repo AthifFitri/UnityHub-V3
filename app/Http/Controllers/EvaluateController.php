@@ -7,9 +7,7 @@ use App\Models\Assessment;
 use App\Models\Course;
 use App\Models\Evaluation;
 use App\Models\EvaluationCriteria;
-use App\Models\EvaluationDocument;
-use App\Models\EvaluationFinalPresent;
-use App\Models\EvaluationLogbook;
+use App\Models\EvaluationScore;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,7 +53,7 @@ class EvaluateController extends Controller
             'assessor' => 'required|in:University,Industry',
             'course' => 'required|exists:courses,courseId',
             'assessment' => 'required|exists:assessments,assessmentId',
-            'plo' => 'required|integer|min:1|max:9',
+            'plo' => 'required|integer|min:2|max:9',
             'criteria.*' => 'required|string',
             'weight.*' => 'required|numeric|min:0|max:10',
         ]);
@@ -161,84 +159,23 @@ class EvaluateController extends Controller
     public function index_supervisor()
     {
         $students = Student::all();
-        return view('supervisor.evaluation.index', compact('students'));
-    }
 
-    public function logbookEvaluate_supervisor($stuId)
-    {
-        $student = Student::findOrFail($stuId);
-
-        $evaluationsCSM4908 = Evaluation::with('criteria')
-            ->whereHas('course', function ($query) {
-                $query->where('courseCode', 'CSM4908');
-            })
+        $evaluations = Evaluation::with(['criteria', 'course', 'assessment'])
             ->where('assessor', 'University')
-            ->whereHas('assessment', function ($query) {
-                $query->where('assessmentName', 'logbook');
-            })
             ->get();
 
-        $criteriaCSM4908 = $evaluationsCSM4908->flatMap->criteria;
+        $evaluationsGrouped = $evaluations->groupBy('course.courseCode')->sortKeys();
 
-        $ploCSM4908 = $evaluationsCSM4908->pluck('plo')->unique();
-
-        $evaluationsCSM4928 = Evaluation::with('criteria')
-            ->whereHas('course', function ($query) {
-                $query->where('courseCode', 'CSM4928');
-            })
-            ->where('assessor', 'University')
-            ->whereHas('assessment', function ($query) {
-                $query->where('assessmentName', 'logbook');
-            })
-            ->get();
-
-        $criteriaCSM4928 = $evaluationsCSM4928->flatMap->criteria;
-
-        $ploCSM4928 = $evaluationsCSM4928->pluck('plo')->unique();
-
-        $existingEvaluationsCSM4908 = EvaluationLogbook::where('stuId', $stuId)
-            ->whereIn('evaCriId', $criteriaCSM4908->pluck('evaCriId'))
-            ->get()
-            ->keyBy('evaCriId');
-
-        $existingEvaluationsCSM4928 = EvaluationLogbook::where('stuId', $stuId)
-            ->whereIn('evaCriId', $criteriaCSM4928->pluck('evaCriId'))
-            ->get()
-            ->keyBy('evaCriId');
-
-        return view('supervisor.evaluation.logbookEvaluate', compact(
-            'criteriaCSM4908',
-            'criteriaCSM4928',
-            'student',
-            'existingEvaluationsCSM4908',
-            'existingEvaluationsCSM4928',
-            'ploCSM4908',
-            'ploCSM4928'
-        ));
-    }
-
-    public function logbookEvaluate_store_supervisor(Request $request, $stuId)
-    {
-        $request->validate([
-            'criteria' => 'required|array',
-            'criteria.*' => 'required|numeric|min:0|max:5',
-        ]);
-
-        $student = Student::findOrFail($stuId);
-
-        foreach ($request->input('criteria') as $evaCriId => $score) {
-            EvaluationLogbook::updateOrCreate(
-                [
-                    'stuId' => $student->stuId,
-                    'evaCriId' => $evaCriId,
-                ],
-                [
-                    'logScore' => $score,
-                ]
-            );
+        $assessmentByCourse = [];
+        foreach ($evaluationsGrouped as $courseCode => $evaluations) {
+            $assessments = [];
+            foreach ($evaluations as $evaluation) {
+                $assessments[$evaluation->assessmentId] = $evaluation->assessment->assessmentName;
+            }
+            $assessmentByCourse[$courseCode] = $assessments;
         }
 
-        return redirect()->back()->with('success', 'Evaluation scores saved successfully.');
+        return view('supervisor.evaluation.index', compact('students', 'evaluationsGrouped', 'assessmentByCourse'));
     }
 
     public function documentEvaluate_supervisor($stuId)
@@ -252,20 +189,18 @@ class EvaluateController extends Controller
             })
             ->get();
 
-        $plos = $evaluations->pluck('plo')->unique();
+        $evaluationsGrouped = $evaluations->groupBy('course.courseCode')->sortKeys();
 
-        $evaluationsGrouped = $evaluations->groupBy('course.courseCode');
+        $plosByCourse = [];
+        foreach ($evaluationsGrouped as $courseCode => $evaluations) {
+            $plosByCourse[$courseCode] = $evaluations->pluck('plo')->unique();
+        }
 
-        $existingEvaluations = EvaluationDocument::where('stuId', $stuId)
+        $existingEvaluations = EvaluationScore::whereIn('stuId', $student->pluck('stuId'))
             ->get()
-            ->keyBy('evaCriId');
+            ->groupBy('stuId');
 
-        return view('supervisor.evaluation.documentEvaluate', compact(
-            'student',
-            'plos',
-            'evaluationsGrouped',
-            'existingEvaluations'
-        ));
+        return view('supervisor.evaluation.documentEvaluate', compact('student', 'evaluationsGrouped', 'plosByCourse', 'existingEvaluations'));
     }
 
     public function documentEvaluate_store_supervisor(Request $request, $stuId)
@@ -276,15 +211,70 @@ class EvaluateController extends Controller
         ]);
 
         $student = Student::findOrFail($stuId);
+        $criteria = $request->input('criteria');
+        $plo = $request->input('plo');
 
-        foreach ($request->input('criteria') as $evaCriId => $score) {
-            EvaluationDocument::updateOrCreate(
+        foreach ($criteria as $evaCriId => $score) {
+            EvaluationScore::updateOrCreate(
                 [
                     'stuId' => $student->stuId,
+                    'plo' => $plo,
                     'evaCriId' => $evaCriId,
                 ],
                 [
-                    'docScore' => $score,
+                    'score' => $score,
+                ]
+            );
+        }
+
+        return redirect()->back()->with('success', 'Evaluation scores saved successfully.');
+    }
+
+    public function logbookEvaluate_supervisor($stuId)
+    {
+        $student = Student::findOrFail($stuId);
+
+        $evaluations = Evaluation::with(['criteria', 'course'])
+            ->where('assessor', 'University')
+            ->whereHas('assessment', function ($query) {
+                $query->where('assessmentName', 'logbook');
+            })
+            ->get();
+
+        $evaluationsGrouped = $evaluations->groupBy('course.courseCode')->sortKeys();
+
+        $plosByCourse = [];
+        foreach ($evaluationsGrouped as $courseCode => $evaluations) {
+            $plosByCourse[$courseCode] = $evaluations->pluck('plo')->unique();
+        }
+
+        $existingEvaluations = EvaluationScore::whereIn('stuId', $student->pluck('stuId'))
+            ->get()
+            ->groupBy('stuId');
+
+        return view('supervisor.evaluation.logbookEvaluate', compact('student', 'evaluationsGrouped', 'plosByCourse', 'existingEvaluations'));
+    }
+
+    public function logbookEvaluate_store_supervisor(Request $request, $stuId)
+    {
+        $request->validate([
+            'criteria' => 'required|array',
+            'criteria.*' => 'required|numeric|min:0|max:5',
+        ]);
+
+        $student = Student::findOrFail($stuId);
+        $criteria = $request->input('criteria');
+        $plo = $request->input('plo');
+
+        foreach ($criteria as $evaCriId => $score) {
+            EvaluationScore::updateOrCreate(
+                [
+                    'stuId' => $student->stuId,
+                    'plo' => $plo,
+                    'evaCriId' => $evaCriId,
+                ],
+                [
+                    'score' => $score,
                 ]
             );
         }
@@ -304,14 +294,14 @@ class EvaluateController extends Controller
             })
             ->get();
 
-        $evaluationsGrouped = $evaluations->groupBy('course.courseCode');
+        $evaluationsGrouped = $evaluations->groupBy('course.courseCode')->sortKeys();
 
         $plosByCourse = [];
         foreach ($evaluationsGrouped as $courseCode => $evaluations) {
             $plosByCourse[$courseCode] = $evaluations->pluck('plo')->unique();
         }
 
-        $existingEvaluations = EvaluationFinalPresent::whereIn('stuId', $students->pluck('stuId'))
+        $existingEvaluations = EvaluationScore::whereIn('stuId', $students->pluck('stuId'))
             ->get()
             ->groupBy('stuId');
 
@@ -325,18 +315,310 @@ class EvaluateController extends Controller
         $plo = $request->input('plo');
 
         foreach ($criteria as $evaCriId => $score) {
-            EvaluationFinalPresent::updateOrCreate(
+            EvaluationScore::updateOrCreate(
                 [
                     'stuId' => $stuId,
                     'plo' => $plo,
                     'evaCriId' => $evaCriId
                 ],
                 [
-                    'finalPresentScore' => $score
+                    'score' => $score
                 ]
             );
         }
 
-        return redirect()->route('supervisors.evaluations.presentationEvaluate', ['stuId' => $stuId])->with('success', 'Evaluation updated successfully');
+        return redirect()->route('supervisors.evaluations.presentationEvaluate', ['stuId' => $stuId])->with('success', 'Evaluation scores saved successfully.');
+    }
+
+    public function projectOutputEvaluate_supervisor(Request $request)
+    {
+        $supervisor = Auth::user();
+        $students = $supervisor->students;
+
+        $evaluations = Evaluation::with(['criteria', 'course'])
+            ->where('assessor', 'University')
+            ->whereHas('assessment', function ($query) {
+                $query->where('assessmentName', 'project output');
+            })
+            ->get();
+
+        $evaluationsGrouped = $evaluations->groupBy('course.courseCode')->sortKeys();
+
+        $plosByCourse = [];
+        foreach ($evaluationsGrouped as $courseCode => $evaluations) {
+            $plosByCourse[$courseCode] = $evaluations->pluck('plo')->unique();
+        }
+
+        $existingEvaluations = EvaluationScore::whereIn('stuId', $students->pluck('stuId'))
+            ->get()
+            ->groupBy('stuId');
+
+        return view('supervisor.evaluation.projectOutputEvaluate', compact('students', 'evaluationsGrouped', 'plosByCourse', 'existingEvaluations'));
+    }
+
+    public function projectOutputEvaluate_store_supervisor(Request $request)
+    {
+        $stuId = $request->input('stuId');
+        $criteria = $request->input('criteria');
+        $plo = $request->input('plo');
+
+        foreach ($criteria as $evaCriId => $score) {
+            EvaluationScore::updateOrCreate(
+                [
+                    'stuId' => $stuId,
+                    'plo' => $plo,
+                    'evaCriId' => $evaCriId
+                ],
+                [
+                    'score' => $score
+                ]
+            );
+        }
+
+        return redirect()->route('supervisors.evaluations.projectOutputEvaluate', ['stuId' => $stuId])->with('success', 'Evaluation scores saved successfully.');
+    }
+
+    public function documentEvaluate_coach($stuId)
+    {
+        $student = Student::findOrFail($stuId);
+
+        $evaluations = Evaluation::with(['criteria', 'course'])
+            ->where('assessor', 'Industry')
+            ->whereHas('assessment', function ($query) {
+                $query->where('assessmentName', 'project documentation');
+            })
+            ->get();
+
+        $evaluationsGrouped = $evaluations->groupBy('course.courseCode')->sortKeys();
+
+        $plosByCourse = [];
+        foreach ($evaluationsGrouped as $courseCode => $evaluations) {
+            $plosByCourse[$courseCode] = $evaluations->pluck('plo')->unique();
+        }
+
+        $existingEvaluations = EvaluationScore::whereIn('stuId', $student->pluck('stuId'))
+            ->get()
+            ->groupBy('stuId');
+
+        return view('coach.evaluation.documentEvaluate', compact('student', 'evaluationsGrouped', 'plosByCourse', 'existingEvaluations'));
+    }
+
+    public function documentEvaluate_store_coach(Request $request, $stuId)
+    {
+        $request->validate([
+            'criteria' => 'required|array',
+            'criteria.*' => 'required|numeric|min:0|max:5',
+        ]);
+
+        $student = Student::findOrFail($stuId);
+        $criteria = $request->input('criteria');
+        $plo = $request->input('plo');
+
+        foreach ($criteria as $evaCriId => $score) {
+            EvaluationScore::updateOrCreate(
+                [
+                    'stuId' => $student->stuId,
+                    'plo' => $plo,
+                    'evaCriId' => $evaCriId,
+                ],
+                [
+                    'score' => $score,
+                ]
+            );
+        }
+
+        return redirect()->back()->with('success', 'Evaluation scores saved successfully.');
+    }
+
+    public function observationEvaluate_coach(Request $request)
+    {
+        $coach = Auth::user();
+        $students = $coach->students;
+
+        $evaluations = Evaluation::with(['criteria', 'course'])
+            ->where('assessor', 'Industry')
+            ->whereHas('assessment', function ($query) {
+                $query->where('assessmentName', 'observation');
+            })
+            ->get();
+
+        $evaluationsGrouped = $evaluations->groupBy('course.courseCode')->sortKeys();
+
+        $plosByCourse = [];
+        foreach ($evaluationsGrouped as $courseCode => $evaluations) {
+            $plosByCourse[$courseCode] = $evaluations->pluck('plo')->unique();
+        }
+
+        $existingEvaluations = EvaluationScore::whereIn('stuId', $students->pluck('stuId'))
+            ->get()
+            ->groupBy('stuId');
+
+        return view('coach.evaluation.observationEvaluate', compact('students', 'evaluationsGrouped', 'plosByCourse', 'existingEvaluations'));
+    }
+
+    public function observationEvaluate_store_coach(Request $request)
+    {
+        $stuId = $request->input('stuId');
+        $criteria = $request->input('criteria');
+        $plo = $request->input('plo');
+
+        foreach ($criteria as $evaCriId => $score) {
+            EvaluationScore::updateOrCreate(
+                [
+                    'stuId' => $stuId,
+                    'plo' => $plo,
+                    'evaCriId' => $evaCriId
+                ],
+                [
+                    'score' => $score
+                ]
+            );
+        }
+
+        return redirect()->route('coaches.evaluations.observationEvaluate', ['stuId' => $stuId])->with('success', 'Evaluation scores saved successfully.');
+    }
+
+    public function progressPresentationEvaluate_coach(Request $request)
+    {
+        $coach = Auth::user();
+        $students = $coach->students;
+
+        $evaluations = Evaluation::with(['criteria', 'course'])
+            ->where('assessor', 'Industry')
+            ->whereHas('assessment', function ($query) {
+                $query->where('assessmentName', 'progress presentation');
+            })
+            ->get();
+
+        $evaluationsGrouped = $evaluations->groupBy('course.courseCode')->sortKeys();
+
+        $plosByCourse = [];
+        foreach ($evaluationsGrouped as $courseCode => $evaluations) {
+            $plosByCourse[$courseCode] = $evaluations->pluck('plo')->unique();
+        }
+
+        $existingEvaluations = EvaluationScore::whereIn('stuId', $students->pluck('stuId'))
+            ->get()
+            ->groupBy('stuId');
+
+        return view('coach.evaluation.progressPresentationEvaluate', compact('students', 'evaluationsGrouped', 'plosByCourse', 'existingEvaluations'));
+    }
+
+    public function progressPresentationEvaluate_store_coach(Request $request)
+    {
+        $stuId = $request->input('stuId');
+        $criteria = $request->input('criteria');
+        $plo = $request->input('plo');
+
+        foreach ($criteria as $evaCriId => $score) {
+            EvaluationScore::updateOrCreate(
+                [
+                    'stuId' => $stuId,
+                    'plo' => $plo,
+                    'evaCriId' => $evaCriId
+                ],
+                [
+                    'score' => $score
+                ]
+            );
+        }
+
+        return redirect()->route('coaches.evaluations.progressPresentationEvaluate', ['stuId' => $stuId])->with('success', 'Evaluation scores saved successfully.');
+    }
+
+    public function finalPresentationEvaluate_coach(Request $request)
+    {
+        $coach = Auth::user();
+        $students = $coach->students;
+
+        $evaluations = Evaluation::with(['criteria', 'course'])
+            ->where('assessor', 'Industry')
+            ->whereHas('assessment', function ($query) {
+                $query->where('assessmentName', 'final presentation');
+            })
+            ->get();
+
+        $evaluationsGrouped = $evaluations->groupBy('course.courseCode')->sortKeys();
+
+        $plosByCourse = [];
+        foreach ($evaluationsGrouped as $courseCode => $evaluations) {
+            $plosByCourse[$courseCode] = $evaluations->pluck('plo')->unique();
+        }
+
+        $existingEvaluations = EvaluationScore::whereIn('stuId', $students->pluck('stuId'))
+            ->get()
+            ->groupBy('stuId');
+
+        return view('coach.evaluation.finalPresentationEvaluate', compact('students', 'evaluationsGrouped', 'plosByCourse', 'existingEvaluations'));
+    }
+
+    public function finalPresentationEvaluate_store_coach(Request $request)
+    {
+        $stuId = $request->input('stuId');
+        $criteria = $request->input('criteria');
+        $plo = $request->input('plo');
+
+        foreach ($criteria as $evaCriId => $score) {
+            EvaluationScore::updateOrCreate(
+                [
+                    'stuId' => $stuId,
+                    'plo' => $plo,
+                    'evaCriId' => $evaCriId
+                ],
+                [
+                    'score' => $score
+                ]
+            );
+        }
+
+        return redirect()->route('coaches.evaluations.finalPresentationEvaluate', ['stuId' => $stuId])->with('success', 'Evaluation scores saved successfully.');
+    }
+
+    public function projectOutputEvaluate_coach(Request $request)
+    {
+        $supervisor = Auth::user();
+        $students = $supervisor->students;
+
+        $evaluations = Evaluation::with(['criteria', 'course'])
+            ->where('assessor', 'Industry')
+            ->whereHas('assessment', function ($query) {
+                $query->where('assessmentName', 'project output');
+            })
+            ->get();
+
+        $evaluationsGrouped = $evaluations->groupBy('course.courseCode')->sortKeys();
+
+        $plosByCourse = [];
+        foreach ($evaluationsGrouped as $courseCode => $evaluations) {
+            $plosByCourse[$courseCode] = $evaluations->pluck('plo')->unique();
+        }
+
+        $existingEvaluations = EvaluationScore::whereIn('stuId', $students->pluck('stuId'))
+            ->get()
+            ->groupBy('stuId');
+
+        return view('coach.evaluation.projectOutputEvaluate', compact('students', 'evaluationsGrouped', 'plosByCourse', 'existingEvaluations'));
+    }
+
+    public function projectOutputEvaluate_store_coach(Request $request)
+    {
+        $stuId = $request->input('stuId');
+        $criteria = $request->input('criteria');
+        $plo = $request->input('plo');
+
+        foreach ($criteria as $evaCriId => $score) {
+            EvaluationScore::updateOrCreate(
+                [
+                    'stuId' => $stuId,
+                    'plo' => $plo,
+                    'evaCriId' => $evaCriId
+                ],
+                [
+                    'score' => $score
+                ]
+            );
+        }
+
+        return redirect()->route('coaches.evaluations.projectOutputEvaluate', ['stuId' => $stuId])->with('success', 'Evaluation scores saved successfully.');
     }
 }

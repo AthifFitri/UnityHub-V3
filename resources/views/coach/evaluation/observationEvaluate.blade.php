@@ -3,13 +3,13 @@
 @section('content')
     <div class="container mx-auto p-4">
         <div class="m-5">
-            <h1 class="text-3xl font-bold">Student Final Presentation Evaluation</h1>
+            <h1 class="text-3xl font-bold">Student Observation Evaluation</h1>
         </div>
 
         <div class="bg-gray-100 p-6 rounded-md shadow-md">
             <div class="flex flex-row mb-4">
                 <label for="stuId" class="block font-semibold text-base text-gray-700 mr-2">Student Name:</label>
-                <form action="{{ route('supervisors.evaluations.presentationEvaluate') }}" method="GET">
+                <form action="{{ route('coaches.evaluations.observationEvaluate') }}" method="GET">
                     <select name="stuId" id="stuId" onchange="this.form.submit()" class="select-input">
                         <option value="" selected>Select Student</option>
                         @foreach ($students as $student)
@@ -47,7 +47,7 @@
                             <div id="studentEvaluations{{ $courseCode }}"
                                 class="studentEvaluations {{ request('stuId') ? '' : 'hidden' }}">
                                 @foreach ($plosByCourse[$courseCode] as $plo)
-                                    <form action="{{ route('supervisors.evaluations.presentationEvaluate.store') }}"
+                                    <form action="{{ route('coaches.evaluations.observationEvaluate.store') }}"
                                         method="POST">
                                         @csrf
 
@@ -159,7 +159,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var activeTab = localStorage.getItem('activeTab_presentationEvaluate');
+            var activeTab = localStorage.getItem('activeTab_observationEvaluate');
             if (activeTab) {
                 switchTab(activeTab);
             }
@@ -182,7 +182,7 @@
             document.getElementById('evaluation' + activeTab).classList.remove('hidden');
             document.getElementById('tab' + activeTab).classList.remove('bg-gray-300');
             document.getElementById('tab' + activeTab).classList.add('bg-blue-500', 'text-white');
-            localStorage.setItem('activeTab_presentationEvaluate', activeTab);
+            localStorage.setItem('activeTab_observationEvaluate', activeTab);
         }
 
         function updateStuId(stuId) {

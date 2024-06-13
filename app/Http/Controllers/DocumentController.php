@@ -162,4 +162,21 @@ class DocumentController extends Controller
 
         return view('supervisor.documentation.index', compact('documents', 'documentTypes', 'students', 'selectedStudentId'));
     }
+
+    public function index_coach(Request $request)
+    {
+        $coach = Auth::user();
+        $students = $coach->students;
+
+        $selectedStudentId = $request->input('stuId');
+        $documentTypes = $this->getDocumentTypes();
+
+        if ($selectedStudentId) {
+            $documents = Document::where('stuId', $selectedStudentId)->get();
+        } else {
+            $documents = collect();
+        }
+
+        return view('coach.documentation.index', compact('documents', 'documentTypes', 'students', 'selectedStudentId'));
+    }
 }

@@ -16,11 +16,13 @@ class Student extends Authenticatable
 
     protected $fillable = [
         'stuName',
+        'stuMatricNo',
         'stuEmail',
         'stuPassword',
         'stuPhone',
         'supervisor',
-        'coachId'
+        'coachId',
+        'session',
     ];
 
     protected $hidden = [
@@ -40,6 +42,11 @@ class Student extends Authenticatable
     public function getRoleAttribute()
     {
         return 'student';
+    }
+
+    public function sessionDetails()
+    {
+        return $this->belongsTo(Session::class, 'session', 'sessionId');
     }
 
     public function supervisorDetails()

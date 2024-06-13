@@ -11,13 +11,31 @@
                 @csrf
 
                 <div class="mb-4">
+                    <label for="session" class="block font-medium text-base text-gray-700">Session</label>
+                    <select name="session" id="session"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                        required>
+                        <option value="" disabled selected>Select Session</option>
+                        @foreach ($sessions as $session)
+                            <option value="{{ $session->sessionId }}">{{ $session->sessionSemester }}
+                                {{ $session->sessionYear }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-4">
                     <label for="courseCode" class="block font-medium text-base text-gray-700">Course Code</label>
-                    <input type="text" name="courseCode" id="courseCode" class="block w-full rounded-md p-1" required>
+                    <input type="text" name="courseCode" id="courseCode"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                        required>
                 </div>
 
                 <div class="mb-4">
                     <label for="courseName" class="block font-medium text-base text-gray-700">Course Name</label>
-                    <textarea name="courseName" id="courseName" rows="2" class="block w-full rounded-md p-1" required></textarea>
+                    <textarea name="courseName" id="courseName" rows="2"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                        required></textarea>
                 </div>
 
                 <div class="flex items-center justify-center mt-4">

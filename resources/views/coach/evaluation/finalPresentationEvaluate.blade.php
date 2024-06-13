@@ -9,7 +9,7 @@
         <div class="bg-gray-100 p-6 rounded-md shadow-md">
             <div class="flex flex-row mb-4">
                 <label for="stuId" class="block font-semibold text-base text-gray-700 mr-2">Student Name:</label>
-                <form action="{{ route('supervisors.evaluations.presentationEvaluate') }}" method="GET">
+                <form action="{{ route('coaches.evaluations.finalPresentationEvaluate') }}" method="GET">
                     <select name="stuId" id="stuId" onchange="this.form.submit()" class="select-input">
                         <option value="" selected>Select Student</option>
                         @foreach ($students as $student)
@@ -47,7 +47,7 @@
                             <div id="studentEvaluations{{ $courseCode }}"
                                 class="studentEvaluations {{ request('stuId') ? '' : 'hidden' }}">
                                 @foreach ($plosByCourse[$courseCode] as $plo)
-                                    <form action="{{ route('supervisors.evaluations.presentationEvaluate.store') }}"
+                                    <form action="{{ route('coaches.evaluations.finalPresentationEvaluate.store') }}"
                                         method="POST">
                                         @csrf
 
@@ -159,7 +159,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var activeTab = localStorage.getItem('activeTab_presentationEvaluate');
+            var activeTab = localStorage.getItem('activeTab_finalPresentationEvaluate');
             if (activeTab) {
                 switchTab(activeTab);
             }
@@ -182,7 +182,7 @@
             document.getElementById('evaluation' + activeTab).classList.remove('hidden');
             document.getElementById('tab' + activeTab).classList.remove('bg-gray-300');
             document.getElementById('tab' + activeTab).classList.add('bg-blue-500', 'text-white');
-            localStorage.setItem('activeTab_presentationEvaluate', activeTab);
+            localStorage.setItem('activeTab_finalPresentationEvaluate', activeTab);
         }
 
         function updateStuId(stuId) {

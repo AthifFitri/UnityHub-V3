@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('evaluation_logbook', function (Blueprint $table) {
-            $table->id('evaLogId');
+        Schema::create('evaluation_score', function (Blueprint $table) {
+            $table->id('evaScoreId');
             $table->unsignedBigInteger('stuId');
+            $table->integer('plo');
             $table->unsignedBigInteger('evaCriId');
-            $table->float('logScore')->nullable();
+            $table->float('score')->nullable();
             $table->timestamps();
 
             $table->foreign('stuId')->references('stuId')->on('student')->onDelete('cascade');
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('evaluation_logbook');
+        Schema::dropIfExists('evaluation_score');
     }
 };

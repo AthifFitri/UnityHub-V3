@@ -5,27 +5,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EvaluationDocument extends Model
+class EvaluationScore extends Model
 {
     use HasFactory;
 
-    protected $table = 'evaluation_document';
+    protected $table = 'evaluation_score';
 
-    protected $primaryKey = 'evaDocId';
+    protected $primaryKey = 'evaScoreId';
 
     protected $fillable = [
         'stuId',
+        'plo',
         'evaCriId',
-        'docScore',
+        'score',
     ];
 
     public function studentDetails()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class, 'stuId');
     }
 
     public function criteria()
     {
-        return $this->belongsTo(EvaluationCriteria::class);
+        return $this->belongsTo(EvaluationCriteria::class, 'evaCriId');
     }
 }

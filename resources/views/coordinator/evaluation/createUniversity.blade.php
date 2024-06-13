@@ -45,7 +45,7 @@
                         class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500"
                         required>
                         <option value="" disabled selected>Select PLO</option>
-                        @foreach (range(1, 9) as $plo)
+                        @foreach (range(2, 9) as $plo)
                             <option value="{{ $plo }}">PLO{{ $plo }}</option>
                         @endforeach
                     </select>

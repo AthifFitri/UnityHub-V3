@@ -52,7 +52,7 @@
                     @foreach ($evaluation->criteria as $index => $criteria)
                         <tr class="text-center">
                             <td class="border px-4 py-2">{{ $index + 1 }}</td>
-                            <td class="border px-4 py-2 text-left w-1/2">{{ $criteria->criteria }}</td>
+                            <td class="border px-4 py-2 text-justify w-1/2">{{ $criteria->criteria }}</td>
                             <td class="border px-4 py-2">{{ number_format($criteria->weight, 2) }}</td>
                             <td class="border px-4 py-2">{{ number_format($criteria->weight * 5, 2) }}</td>
                             <td class="border px-4 py-2">

@@ -12,6 +12,7 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EvaluateController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\SessionController;
 use App\Models\Assessment;
 
 /*
@@ -96,12 +97,14 @@ Route::middleware('auth:staff')->group(function () {
 
     // Module Manage Evaluation for Supervisor
     Route::get('/supervisor/evaluation/index', [EvaluateController::class, 'index_supervisor'])->name('supervisors.evaluations.index');
-    Route::get('/supervisor/evaluation/logbookEvaluate/{stuId}', [EvaluateController::class, 'logbookEvaluate_supervisor'])->name('supervisors.evaluations.logbookEvaluate');
-    Route::post('/supervisor/evaluation/logbookEvaluate/{stuId}', [EvaluateController::class, 'logbookEvaluate_store_supervisor'])->name('supervisors.evaluations.logbookEvaluate.store');
-    Route::get('/supervisor/evaluation/documentEvaluate/{stuId}', [EvaluateController::class, 'documentEvaluate_supervisor'])->name('supervisors.evaluations.documentEvaluate');
-    Route::post('/supervisor/evaluation/documentEvaluate/{stuId}', [EvaluateController::class, 'documentEvaluate_store_supervisor'])->name('supervisors.evaluations.documentEvaluate.store');
+    Route::get('/supervisor/evaluation/documentEvaluate/stuId={stuId}', [EvaluateController::class, 'documentEvaluate_supervisor'])->name('supervisors.evaluations.documentEvaluate');
+    Route::post('/supervisor/evaluation/documentEvaluate/stuId={stuId}', [EvaluateController::class, 'documentEvaluate_store_supervisor'])->name('supervisors.evaluations.documentEvaluate.store');
+    Route::get('/supervisor/evaluation/logbookEvaluate/stuId={stuId}', [EvaluateController::class, 'logbookEvaluate_supervisor'])->name('supervisors.evaluations.logbookEvaluate');
+    Route::post('/supervisor/evaluation/logbookEvaluate/stuId={stuId}', [EvaluateController::class, 'logbookEvaluate_store_supervisor'])->name('supervisors.evaluations.logbookEvaluate.store');
     Route::get('/supervisor/evaluation/presentationEvaluate', [EvaluateController::class, 'presentationEvaluate_supervisor'])->name('supervisors.evaluations.presentationEvaluate');
     Route::post('/supervisor/evaluation/presentationEvaluate', [EvaluateController::class, 'presentationEvaluate_store_supervisor'])->name('supervisors.evaluations.presentationEvaluate.store');
+    Route::get('/supervisor/evaluation/projectOutputEvaluate', [EvaluateController::class, 'projectOutputEvaluate_supervisor'])->name('supervisors.evaluations.projectOutputEvaluate');
+    Route::post('/supervisor/evaluation/projectOutputEvaluate', [EvaluateController::class, 'projectOutputEvaluate_store_supervisor'])->name('supervisors.evaluations.projectOutputEvaluate.store');
 
 
     // Coordinator functions
@@ -146,13 +149,15 @@ Route::middleware('auth:staff')->group(function () {
     Route::delete('/coordinator/evaluation/destroyPlo/{evaId}', [EvaluateController::class, 'destroyPlo_coordinator'])->name('coordinators.evaluations.destroyPlo');
     Route::delete('/coordinator/evaluation/destroyCriteria/{evaCriId}', [EvaluateController::class, 'destroyCriteria_coordinator'])->name('coordinators.evaluations.destroyCriteria');
 
-    // Module Manage Assessment for Coordinator (features)
-    Route::get('/coordinator/assessment/index', [AssessmentController::class, 'index_coordinator'])->name('coordinators.assessments.index');
-    Route::get('/coordinator/assessment/create', [AssessmentController::class, 'create_coordinator'])->name('coordinators.assessments.create');
-    Route::post('/coordinator/assessment/index', [AssessmentController::class, 'store_coordinator'])->name('coordinators.assessments.store');
-    Route::get('/coordinator/assessment/edit/{assessmentId}', [AssessmentController::class, 'edit_coordinator'])->name('coordinators.assessments.edit');
-    Route::put('/coordinator/assessment/update/{assessmentId}', [AssessmentController::class, 'update_coordinator'])->name('coordinators.assessments.update');
-    Route::delete('/coordinator/assessment/delete/{assessmentId}', [AssessmentController::class, 'destroy_coordinator'])->name('coordinators.assessments.destroy');
+    // Module Manage Session for Coordinator (features)
+    Route::get('/coordinator/session/index', [SessionController::class, 'index_coordinator'])->name('coordinators.sessions.index');
+    Route::get('/coordinator/session/create', [SessionController::class, 'create_coordinator'])->name('coordinators.sessions.create');
+    Route::post('/coordinator/session/index', [SessionController::class, 'store_coordinator'])->name('coordinators.sessions.store');
+    Route::get('/coordinator/session/edit/{id}', [SessionController::class, 'edit_coordinator'])->name('coordinators.sessions.edit');
+    Route::put('/coordinator/session/update/{id}', [SessionController::class, 'update_coordinator'])->name('coordinators.sessions.update');
+    Route::delete('/coordinator/session/delete/{id}', [SessionController::class, 'destroy_coordinator'])->name('coordinators.sessions.destroy');
+    Route::get('/coordinator/session/studentSession', [SessionController::class, 'studentSessions_coordinator'])->name('coordinators.sessions.studentSession');
+    Route::post('/coordinator/session/studentSession/update', [SessionController::class, 'update_studentSessions_coordinator'])->name('coordinators.sessions.studentSession.update');
 
     // Module Manage Course for Coordinator (features)
     Route::get('/coordinator/course/index', [CourseController::class, 'index_coordinator'])->name('coordinators.courses.index');
@@ -161,6 +166,14 @@ Route::middleware('auth:staff')->group(function () {
     Route::get('/coordinator/course/edit/{id}', [CourseController::class, 'edit_coordinator'])->name('coordinators.courses.edit');
     Route::put('/coordinator/course/update/{id}', [CourseController::class, 'update_coordinator'])->name('coordinators.courses.update');
     Route::delete('/coordinator/course/delete/{id}', [CourseController::class, 'destroy_coordinator'])->name('coordinators.courses.destroy');
+
+    // Module Manage Assessment for Coordinator (features)
+    Route::get('/coordinator/assessment/index', [AssessmentController::class, 'index_coordinator'])->name('coordinators.assessments.index');
+    Route::get('/coordinator/assessment/create', [AssessmentController::class, 'create_coordinator'])->name('coordinators.assessments.create');
+    Route::post('/coordinator/assessment/index', [AssessmentController::class, 'store_coordinator'])->name('coordinators.assessments.store');
+    Route::get('/coordinator/assessment/edit/{assessmentId}', [AssessmentController::class, 'edit_coordinator'])->name('coordinators.assessments.edit');
+    Route::put('/coordinator/assessment/update/{assessmentId}', [AssessmentController::class, 'update_coordinator'])->name('coordinators.assessments.update');
+    Route::delete('/coordinator/assessment/delete/{assessmentId}', [AssessmentController::class, 'destroy_coordinator'])->name('coordinators.assessments.destroy');
 
 
     // Head of Program functions
@@ -201,4 +214,17 @@ Route::middleware('auth:coach')->group(function () {
     Route::get('/coach/resume/edit/{id}', [ResumeController::class, 'edit_coach'])->name('coaches.resume.edit');
     Route::put('/coach/resume/update/{id}', [ResumeController::class, 'update_coach'])->name('coaches.resume.update');
     Route::delete('/coach/resume/delete/{id}', [ResumeController::class, 'destroy_coach'])->name('coaches.resume.destroy');
+    Route::get('/coach/documentation/index', [DocumentController::class, 'index_coach'])->name('coaches.documents.index');
+
+    // Module Manage Evaluation
+    Route::get('/coach/evaluation/documentEvaluate/stuId={stuId}', [EvaluateController::class, 'documentEvaluate_coach'])->name('coaches.evaluations.documentEvaluate');
+    Route::post('/coach/evaluation/documentEvaluate/stuId={stuId}', [EvaluateController::class, 'documentEvaluate_store_coach'])->name('coaches.evaluations.documentEvaluate.store');
+    Route::get('/coach/evaluation/observationEvaluate', [EvaluateController::class, 'observationEvaluate_coach'])->name('coaches.evaluations.observationEvaluate');
+    Route::post('/coach/evaluation/observationEvaluate', [EvaluateController::class, 'observationEvaluate_store_coach'])->name('coaches.evaluations.observationEvaluate.store');
+    Route::get('/coach/evaluation/progressPresentationEvaluate', [EvaluateController::class, 'progressPresentationEvaluate_coach'])->name('coaches.evaluations.progressPresentationEvaluate');
+    Route::post('/coach/evaluation/progressPresentationEvaluate', [EvaluateController::class, 'progressPresentationEvaluate_store_coach'])->name('coaches.evaluations.progressPresentationEvaluate.store');
+    Route::get('/coach/evaluation/finalPresentationEvaluate', [EvaluateController::class, 'finalPresentationEvaluate_coach'])->name('coaches.evaluations.finalPresentationEvaluate');
+    Route::post('/coach/evaluation/finalPresentationEvaluate', [EvaluateController::class, 'finalPresentationEvaluate_store_coach'])->name('coaches.evaluations.finalPresentationEvaluate.store');
+    Route::get('/coach/evaluation/projectOutputEvaluate', [EvaluateController::class, 'projectOutputEvaluate_coach'])->name('coaches.evaluations.projectOutputEvaluate');
+    Route::post('/coach/evaluation/projectOutputEvaluate', [EvaluateController::class, 'projectOutputEvaluate_store_coach'])->name('coaches.evaluations.projectOutputEvaluate.store');
 });

@@ -45,7 +45,7 @@
                                     request()->routeIs('supervisors.documents.index') ||
                                     request()->routeIs('supervisors.logbooks.index') ||
                                     request()->routeIs('supervisors.evaluations.presentationEvaluate') ||
-                                    request()->routeIs('supervisors.evaluations.presentationEvaluate')) font-semibold text-blue-400 @endif">Student
+                                    request()->routeIs('supervisors.evaluations.projectOutputEvaluate')) font-semibold text-blue-400 @endif">Student
                             Evaluation</i></a>
                         <ul class="absolute left-0 hidden mt-2 bg-white border border-gray-200 rounded-md shadow-lg"
                             id="studentMenu">

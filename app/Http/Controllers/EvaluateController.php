@@ -177,6 +177,18 @@ class EvaluateController extends Controller
         $allPlosByCourse = [];
         $processedEvaluations = [];
 
+        $ploNames = [
+            1 => 'Knowledge and Understanding',
+            2 => 'Practical Skills',
+            3 => 'Cognitive Skills',
+            4 => 'Communication Skills',
+            5 => 'Interpersonal Skills',
+            6 => 'Ethics and Professionalism',
+            7 => 'Personal Skills',
+            8 => 'Entrepreneurial Skills',
+            9 => 'Leadership, Autonomy and Responsibility'
+        ];
+
         foreach ($courses as $course) {
             $plos = $course->evaluations->pluck('plo')->unique();
             $sortedPlos = $plos->sort()->values()->all();
@@ -212,7 +224,7 @@ class EvaluateController extends Controller
             }
         }
 
-        return view('coordinator.evaluation.studentEvaluateDetails', compact('student', 'courses', 'marksByPloAndAssessor', 'allPlosByCourse'));
+        return view('coordinator.evaluation.studentEvaluateDetails', compact('student', 'courses', 'marksByPloAndAssessor', 'allPlosByCourse', 'ploNames'));
     }
 
     public function index_supervisor()

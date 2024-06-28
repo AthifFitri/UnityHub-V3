@@ -13,6 +13,7 @@ use App\Http\Controllers\EvaluateController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\StudentInformationController;
 use App\Models\Assessment;
 
 /*
@@ -132,9 +133,8 @@ Route::middleware('auth:staff')->group(function () {
 
     // Module Manage Quiz for Coordinator
     Route::get('/coordinator/quiz/index', [QuizController::class, 'index_coordinator'])->name('coordinators.quizes.index');
-    Route::get('/coordinator/quiz/score/{id}', [QuizController::class, 'show_student_score'])->name('coordinators.quizes.score');
-    Route::get('/coordinator/quiz/edit/{id}/{course}', [QuizController::class, 'edit_coordinator'])->name('coordinators.quizes.edit');
-    Route::put('/coordinator/quiz/update/{id}/{course}', [QuizController::class, 'update_coordinator'])->name('coordinators.quizes.update');
+    Route::get('/coordinators/quizes/edit/{stuId}/{courseId}', [QuizController::class, 'edit_coordinator'])->name('coordinators.quizes.edit');
+    Route::put('/coordinator/quiz/update/{stuId}/{courseId}', [QuizController::class, 'update_coordinator'])->name('coordinators.quizes.update');
 
     // Module Manage Evaluation for Coordinator
     Route::get('/coordinator/evaluation/index', [EvaluateController::class, 'index_coordinator'])->name('coordinators.evaluations.index');
@@ -148,6 +148,8 @@ Route::middleware('auth:staff')->group(function () {
     Route::post('coordinators/evaluations/storeCriteria/{evaId}', [EvaluateController::class, 'storeCriteria_coordinator'])->name('coordinators.evaluations.storeCriteria');
     Route::delete('/coordinator/evaluation/destroyPlo/{evaId}', [EvaluateController::class, 'destroyPlo_coordinator'])->name('coordinators.evaluations.destroyPlo');
     Route::delete('/coordinator/evaluation/destroyCriteria/{evaCriId}', [EvaluateController::class, 'destroyCriteria_coordinator'])->name('coordinators.evaluations.destroyCriteria');
+    Route::get('/coordinator/evaluation/studentEvaluateOverview', [EvaluateController::class, 'studentEvaluateOverview_coordinator'])->name('coordinators.evaluations.studentEvaluateOverview');
+    Route::get('/coordinator/evaluation/studentEvaluateDetails/stuId={stuId}', [EvaluateController::class, 'studentEvaluateDetails_coordinator'])->name('coordinators.evaluations.studentEvaluateDetails');
 
     // Module Manage Session for Coordinator (features)
     Route::get('/coordinator/session/index', [SessionController::class, 'index_coordinator'])->name('coordinators.sessions.index');
@@ -174,6 +176,11 @@ Route::middleware('auth:staff')->group(function () {
     Route::get('/coordinator/assessment/edit/{assessmentId}', [AssessmentController::class, 'edit_coordinator'])->name('coordinators.assessments.edit');
     Route::put('/coordinator/assessment/update/{assessmentId}', [AssessmentController::class, 'update_coordinator'])->name('coordinators.assessments.update');
     Route::delete('/coordinator/assessment/delete/{assessmentId}', [AssessmentController::class, 'destroy_coordinator'])->name('coordinators.assessments.destroy');
+
+    // Module Manage Student's Coach for Coordinator (features)
+    Route::get('/coordinator/studentInformation/index', [StudentInformationController::class, 'index_coordinator'])->name('coordinators.infos.index');
+    Route::get('/coordinator/studentInformation/assignCoach/{stuId}', [StudentInformationController::class, 'assignCoach_coordinator'])->name('coordinators.infos.assignCoach');
+    Route::put('/coordinator/studentInformation/updateCoach/{stuId}', [StudentInformationController::class, 'updateCoach_coordinator'])->name('coordinators.infos.updateCoach');
 
 
     // Head of Program functions
@@ -217,6 +224,7 @@ Route::middleware('auth:coach')->group(function () {
     Route::get('/coach/documentation/index', [DocumentController::class, 'index_coach'])->name('coaches.documents.index');
 
     // Module Manage Evaluation
+    Route::get('/coach/evaluation/index', [EvaluateController::class, 'index_coach'])->name('coaches.evaluations.index');
     Route::get('/coach/evaluation/documentEvaluate/stuId={stuId}', [EvaluateController::class, 'documentEvaluate_coach'])->name('coaches.evaluations.documentEvaluate');
     Route::post('/coach/evaluation/documentEvaluate/stuId={stuId}', [EvaluateController::class, 'documentEvaluate_store_coach'])->name('coaches.evaluations.documentEvaluate.store');
     Route::get('/coach/evaluation/observationEvaluate', [EvaluateController::class, 'observationEvaluate_coach'])->name('coaches.evaluations.observationEvaluate');

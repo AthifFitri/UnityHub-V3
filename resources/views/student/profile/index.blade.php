@@ -5,7 +5,7 @@
         <div class="m-5">
             <h1 class="text-center text-3xl font-bold">Student Profile</h1>
         </div>
-        <div class="max-w-md mx-auto bg-gray-100 rounded-xl shadow-md overflow-hidden p-5">
+        <div class="max-w-xl mx-auto bg-gray-100 rounded-xl shadow-md overflow-hidden p-5">
             @if (session('success'))
                 <div class="text-center bg-green-200 p-2 mb-4 rounded-md">
                     {{ session('success') }}
@@ -40,6 +40,10 @@
                     </div>
                     <div class="mt-4">
                         <div class="flex items-center">
+                            <i class="fas fa-graduation-cap text-gray-500"></i>
+                            <p class="ml-2 text-black">{{ $student->stuMatricNo }}</p>
+                        </div>
+                        <div class="flex items-center mt-2">
                             <i class="fas fa-phone-alt text-gray-500"></i>
                             <p class="ml-2 text-black">{{ $student->stuPhone }}</p>
                         </div>

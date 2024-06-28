@@ -44,6 +44,11 @@ class Student extends Authenticatable
         return 'student';
     }
 
+    public function quizzes()
+    {
+        return $this->hasMany(Quiz::class, 'stuId');
+    }
+
     public function sessionDetails()
     {
         return $this->belongsTo(Session::class, 'session', 'sessionId');

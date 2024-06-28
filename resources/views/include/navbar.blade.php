@@ -46,29 +46,50 @@
                                     request()->routeIs('supervisors.logbooks.index') ||
                                     request()->routeIs('supervisors.evaluations.presentationEvaluate') ||
                                     request()->routeIs('supervisors.evaluations.projectOutputEvaluate')) font-semibold text-blue-400 @endif">Student
-                            Evaluation</i></a>
+                            Evaluation
+                            <i class="fas fa-caret-down"></i></a>
                         <ul class="absolute left-0 hidden mt-2 bg-white border border-gray-200 rounded-md shadow-lg"
                             id="studentMenu">
                             <li>
                                 <a href="{{ route('supervisors.evaluations.index') }}"
                                     class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('supervisors.evaluations.index')) font-semibold text-blue-400 @endif">Overview</a>
                             </li>
-                            <li>
-                                <a href="{{ route('supervisors.documents.index') }}"
-                                    class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('supervisors.documents.index')) font-semibold text-blue-400 @endif">Documentation</a>
+                            <li class="relative">
+                                <a href="#" id="continuousAssessmentDropdown"
+                                    class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('supervisors.documents.index') || request()->routeIs('supervisors.logbooks.index')) font-semibold text-blue-400 @endif">Continuous
+                                    Assessment
+                                    <i class="fas fa-caret-right"></i></a>
+                                <ul class="absolute left-full top-0 hidden mt-2 bg-white border border-gray-200 rounded-md shadow-lg"
+                                    id="continuousAssessmentMenu">
+                                    <li>
+                                        <a href="{{ route('supervisors.logbooks.index') }}"
+                                            class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('supervisors.logbooks.index')) font-semibold text-blue-400 @endif">Logbook</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('supervisors.documents.index') }}"
+                                            class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('supervisors.documents.index')) font-semibold text-blue-400 @endif">Documentation</a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li>
-                                <a href="{{ route('supervisors.logbooks.index') }}"
-                                    class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('supervisors.logbooks.index')) font-semibold text-blue-400 @endif">Logbook</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('supervisors.evaluations.presentationEvaluate') }}"
-                                    class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('supervisors.evaluations.presentationEvaluate')) font-semibold text-blue-400 @endif">Presentation</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('supervisors.evaluations.projectOutputEvaluate') }}"
-                                    class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('supervisors.evaluations.projectOutputEvaluate')) font-semibold text-blue-400 @endif">Project
-                                    Output</a>
+                            <li class="relative">
+                                <a href="#" id="finalAssessmentDropdown"
+                                    class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('supervisors.evaluations.presentationEvaluate') ||
+                                            request()->routeIs('supervisors.evaluations.projectOutputEvaluate')) font-semibold text-blue-400 @endif">Final
+                                    Assessment
+                                    <i class="fas fa-caret-right"></i></a>
+                                <ul class="absolute left-full top-0 hidden mt-2 bg-white border border-gray-200 rounded-md shadow-lg"
+                                    id="finalAssessmentMenu">
+                                    <li>
+                                        <a href="{{ route('supervisors.evaluations.presentationEvaluate') }}"
+                                            class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('supervisors.evaluations.presentationEvaluate')) font-semibold text-blue-400 @endif">Final
+                                            Presentation</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('supervisors.evaluations.projectOutputEvaluate') }}"
+                                            class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('supervisors.evaluations.projectOutputEvaluate')) font-semibold text-blue-400 @endif">Project
+                                            Output</a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
@@ -108,11 +129,15 @@
                     </li>
                     <li class="relative">
                         <a href="#" id="studentDropdown"
-                            class="hover:text-blue-400 @if (request()->routeIs('coordinators.sessions.studentSession') ||
-                                    request()->routeIs('coordinators.quizes.index') ||
-                                    request()->routeIs('coordinators.evaluations.index')) font-semibold text-blue-400 @endif">Student</a>
+                            class="hover:text-blue-400 @if (request()->routeIs('coordinators.infos.index') ||
+                                    request()->routeIs('coordinators.sessions.studentSession') ||
+                                    request()->routeIs('coordinators.quizes.index')) font-semibold text-blue-400 @endif">Student</a>
                         <ul class="absolute left-0 hidden mt-2 bg-white border border-gray-200 rounded-md shadow-lg"
                             id="studentMenu">
+                            <li>
+                                <a href="{{ route('coordinators.infos.index') }}"
+                                    class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coordinators.infos.index')) font-semibold text-blue-400 @endif">Information</a>
+                            </li>
                             <li>
                                 <a href="{{ route('coordinators.sessions.studentSession') }}"
                                     class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coordinators.sessions.studentSession')) font-semibold text-blue-400 @endif">Session</a>
@@ -121,11 +146,14 @@
                                 <a href="{{ route('coordinators.quizes.index') }}"
                                     class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coordinators.quizes.index')) font-semibold text-blue-400 @endif">Quiz</a>
                             </li>
-                            <li>
-                                <a href="{{ route('coordinators.evaluations.index') }}"
-                                    class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coordinators.evaluations.index')) font-semibold text-blue-400 @endif">Evaluation</a>
-                            </li>
                         </ul>
+                    </li>
+                    <li><a href="{{ route('coordinators.evaluations.index') }}"
+                            class="hover:text-blue-400 @if (request()->routeIs('coordinators.evaluations.index')) font-semibold text-blue-400 @endif">Evaluation</a>
+                    </li>
+                    <li><a href="{{ route('coordinators.evaluations.studentEvaluateOverview') }}"
+                            class="hover:text-blue-400 @if (request()->routeIs('coordinators.evaluations.studentEvaluateOverview')) font-semibold text-blue-400 @endif">Student
+                            Overview Evaluation</a>
                     </li>
 
                     {{-- Hop Navigation --}}
@@ -151,40 +179,69 @@
                 </li>
                 <li class="relative">
                     <a href="#" id="studentDropdown"
-                        class="hover:text-blue-400 @if (request()->routeIs('coaches.documents.index') ||
+                        class="hover:text-blue-400 @if (request()->routeIs('coaches.evaluations.index') ||
+                                request()->routeIs('coaches.documents.index') ||
                                 request()->routeIs('coaches.logbooks.index') ||
                                 request()->routeIs('coaches.evaluations.observationEvaluate') ||
                                 request()->routeIs('coaches.evaluations.finalPresentationEvaluate') ||
                                 request()->routeIs('coaches.evaluations.projectOutputEvaluate')) font-semibold text-blue-400 @endif">Student
-                        Evaluation</a>
+                        Evaluation
+                        <i class="fas fa-caret-down"></i></a>
                     <ul class="absolute left-0 hidden mt-2 bg-white border border-gray-200 rounded-md shadow-lg"
                         id="studentMenu">
                         <li>
-                            <a href="{{ route('coaches.documents.index') }}"
-                                class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.documents.index')) font-semibold text-blue-400 @endif">Documentation</a>
+                            <a href="{{ route('coaches.evaluations.index') }}"
+                                class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.evaluations.index')) font-semibold text-blue-400 @endif">Overview</a>
                         </li>
-                        <li>
-                            <a href="{{ route('coaches.logbooks.index') }}"
-                                class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.logbooks.index')) font-semibold text-blue-400 @endif">Logbook</a>
+                        <li class="relative">
+                            <a href="#" id="continuousAssessmentDropdown"
+                                class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.logbooks.index') ||
+                                        request()->routeIs('coaches.documents.index') ||
+                                        request()->routeIs('coaches.evaluations.observationEvaluate') ||
+                                        request()->routeIs('coaches.evaluations.progressPresentationEvaluate')) font-semibold text-blue-400 @endif">Continuous
+                                Assessment
+                                <i class="fas fa-caret-right"></i></a>
+                            <ul class="absolute left-full top-0 hidden mt-2 bg-white border border-gray-200 rounded-md shadow-lg"
+                                id="continuousAssessmentMenu">
+                                <li>
+                                    <a href="{{ route('coaches.logbooks.index') }}"
+                                        class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.logbooks.index')) font-semibold text-blue-400 @endif">Logbook</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('coaches.documents.index') }}"
+                                        class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.documents.index')) font-semibold text-blue-400 @endif">Documentation</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('coaches.evaluations.observationEvaluate') }}"
+                                        class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.evaluations.observationEvaluate')) font-semibold text-blue-400 @endif">Observation</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('coaches.evaluations.progressPresentationEvaluate') }}"
+                                        class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.evaluations.progressPresentationEvaluate')) font-semibold text-blue-400 @endif">Progress
+                                        Presentation</a>
+                                </li>
+
+                            </ul>
                         </li>
-                        <li>
-                            <a href="{{ route('coaches.evaluations.observationEvaluate') }}"
-                                class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.evaluations.observationEvaluate')) font-semibold text-blue-400 @endif">Observation</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('coaches.evaluations.progressPresentationEvaluate') }}"
-                                class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.evaluations.progressPresentationEvaluate')) font-semibold text-blue-400 @endif">Progress
-                                Presentation</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('coaches.evaluations.finalPresentationEvaluate') }}"
-                                class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.evaluations.finalPresentationEvaluate')) font-semibold text-blue-400 @endif">Final
-                                Presentation</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('coaches.evaluations.projectOutputEvaluate') }}"
-                                class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.evaluations.projectOutputEvaluate')) font-semibold text-blue-400 @endif">Project
-                                Output</a>
+                        <li class="relative">
+                            <a href="#" id="finalAssessmentDropdown"
+                                class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.evaluations.finalPresentationEvaluate') ||
+                                        request()->routeIs('coaches.evaluations.projectOutputEvaluate')) font-semibold text-blue-400 @endif">Final
+                                Assessment
+                                <i class="fas fa-caret-right"></i></a>
+                            <ul class="absolute left-full top-0 hidden mt-2 bg-white border border-gray-200 rounded-md shadow-lg"
+                                id="finalAssessmentMenu">
+                                <li>
+                                    <a href="{{ route('coaches.evaluations.finalPresentationEvaluate') }}"
+                                        class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.evaluations.finalPresentationEvaluate')) font-semibold text-blue-400 @endif">Final
+                                        Presentation</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('coaches.evaluations.projectOutputEvaluate') }}"
+                                        class="block px-4 py-2 hover:bg-blue-100 hover:text-blue-400 @if (request()->routeIs('coaches.evaluations.projectOutputEvaluate')) font-semibold text-blue-400 @endif">Project
+                                        Output</a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </li>
@@ -302,6 +359,10 @@
             var studentMenu = document.getElementById("studentMenu");
             var coordinatorDropdown = document.getElementById("coordinatorDropdown");
             var coordinatorMenu = document.getElementById("coordinatorMenu");
+            var continuousAssessmentDropdown = document.getElementById("continuousAssessmentDropdown");
+            var continuousAssessmentMenu = document.getElementById("continuousAssessmentMenu");
+            var finalAssessmentDropdown = document.getElementById("finalAssessmentDropdown");
+            var finalAssessmentMenu = document.getElementById("finalAssessmentMenu");
 
             // Function to toggle dropdown visibility
             function toggleDropdown(event, menu) {
@@ -328,6 +389,18 @@
                 });
             }
 
+            if (continuousAssessmentDropdown && continuousAssessmentMenu) {
+                continuousAssessmentDropdown.addEventListener("click", function(event) {
+                    toggleDropdown(event, continuousAssessmentMenu);
+                });
+            }
+
+            if (finalAssessmentDropdown && finalAssessmentMenu) {
+                finalAssessmentDropdown.addEventListener("click", function(event) {
+                    toggleDropdown(event, finalAssessmentMenu);
+                });
+            }
+
             // Clicking outside the dropdowns closes them
             document.addEventListener("click", function(event) {
                 if (dropdownMenu && !profileDropdown.contains(event.target)) {
@@ -338,6 +411,12 @@
                 }
                 if (coordinatorMenu && !coordinatorDropdown.contains(event.target)) {
                     coordinatorMenu.classList.add("hidden");
+                }
+                if (continuousAssessmentMenu && !continuousAssessmentDropdown.contains(event.target)) {
+                    continuousAssessmentMenu.classList.add("hidden");
+                }
+                if (finalAssessmentMenu && !finalAssessmentDropdown.contains(event.target)) {
+                    finalAssessmentMenu.classList.add("hidden");
                 }
             });
         });

@@ -7,7 +7,7 @@
         </div>
 
         <a href="{{ route('registers.create') }}"
-            class="btn btn-primary inline-block ml-5 py-3 w-44 rounded-md text-center bg-blue-700 text-white hover:bg-blue-400 hover:text-black">Create
+            class="btn btn-primary inline-block ml-5 py-3 w-44 rounded-md text-center bg-blue-700 text-white transition duration-300 ease-in-out transform hover:scale-105 hover:bg-blue-400 hover:text-black">Create
             New Coach</a>
 
         <div class="bg-gray-100 p-6 rounded-md shadow-md mt-4">
@@ -41,6 +41,7 @@
                             <th class="border px-4 py-2">Coach Phone Number</th>
                             <th class="border px-4 py-2">Coach Email</th>
                             <th class="border px-4 py-2">Coach Industry</th>
+                            <th class="border px-4 py-2">Resume</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,6 +52,16 @@
                                 <td class="border px-4 py-2">{{ $coach->coachPhone }}</td>
                                 <td class="border px-4 py-2">{{ $coach->coachEmail }}</td>
                                 <td class="border px-4 py-2">{{ $coach->industry->indName }}</td>
+                                <td class="border px-4 py-2">
+                                    <div class="flex justify-center space-x-5">
+                                        @if ($coach->coachResume == null)
+                                            <p class="text-red-500 py-2">No resume uploaded.</p>
+                                        @else
+                                            <a href="{{ asset('resume/' . $coach->coachResume) }}" target="_blank"
+                                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">View</a>
+                                        @endif
+                                    </div>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

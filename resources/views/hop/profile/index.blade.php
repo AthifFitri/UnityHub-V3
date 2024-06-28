@@ -5,7 +5,7 @@
         <div class="m-5">
             <h1 class="text-center text-3xl font-bold">Head of Program Profile</h1>
         </div>
-        <div class="max-w-md mx-auto bg-gray-100 rounded-xl shadow-md overflow-hidden p-5">
+        <div class="max-w-xl mx-auto bg-gray-100 rounded-xl shadow-md overflow-hidden p-5">
             @if (session('success'))
                 <div class="text-center bg-green-200 p-2 mb-4 rounded-md">
                     {{ session('success') }}
@@ -36,7 +36,8 @@
                     </div>
                     <!-- Add Update Profile Button -->
                     <div class="mt-8 justify-end">
-                        <a href="{{ route('hop.profile.edit') }}" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Update Profile</a>
+                        <a href="{{ route('hop.profile.edit') }}"
+                            class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Update Profile</a>
                     </div>
                 </div>
             </div>

@@ -7,7 +7,7 @@
         </div>
 
         <a href="{{ route('coordinators.materials.create') }}"
-            class="btn btn-primary inline-block ml-5 py-3 w-44 rounded-md text-center bg-blue-700 text-white hover:bg-blue-400 hover:text-black">Upload
+            class="btn btn-primary inline-block ml-5 py-3 w-44 rounded-md text-center bg-blue-700 text-white transition duration-300 ease-in-out transform hover:scale-105 hover:bg-blue-400 hover:text-black">Upload
             New Material</a>
 
         <div class="bg-gray-100 p-6 rounded-md shadow-md mt-4">
@@ -51,7 +51,8 @@
                                             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">View</a>
                                         <a href="{{ route('coordinators.materials.edit', $material->matId) }}"
                                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</a>
-                                        <form action="{{ route('coordinators.materials.destroy', $material->matId) }}" method="POST">
+                                        <form action="{{ route('coordinators.materials.destroy', $material->matId) }}"
+                                            method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"

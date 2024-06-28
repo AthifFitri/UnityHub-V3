@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('quizes', function (Blueprint $table) {
             $table->id('quizId');
-            $table->enum('course', ['CSM4908', 'CSM4928']);
+            $table->unsignedBigInteger('courseId');
             $table->unsignedBigInteger('stuId');
             $table->float('score');
             $table->timestamps();
 
+            $table->foreign('courseId')->references('courseId')->on('courses')->onDelete('cascade');
             $table->foreign('stuId')->references('stuId')->on('student')->onDelete('cascade');
         });
     }

@@ -13,10 +13,15 @@ class Quiz extends Model
     protected $primaryKey = 'quizId';
 
     protected $fillable = [
-        'course',
+        'courseId',
         'stuId',
         'score',
     ];
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class, 'courseId');
+    }
 
     public function studentInfo()
     {

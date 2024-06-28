@@ -20,7 +20,7 @@ class Session extends Model
 
     public function students()
     {
-        return $this->hasMany(Student::class, 'sessionId');
+        return $this->hasMany(Student::class, 'session', 'sessionId');
     }
 
     public function courses()

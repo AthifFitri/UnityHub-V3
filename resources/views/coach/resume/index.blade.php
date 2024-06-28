@@ -8,7 +8,7 @@
 
         @if (!$coach->coachResume)
             <a href="{{ route('coaches.resume.create') }}"
-                class="btn btn-primary inline-block ml-5 py-3 w-44 rounded-md text-center bg-blue-700 text-white hover:bg-blue-400 hover:text-black">Upload
+                class="btn btn-primary inline-block ml-5 py-3 w-44 rounded-md text-center bg-blue-700 text-white transition duration-300 ease-in-out transform hover:scale-105 hover:bg-blue-400 hover:text-black">Upload
                 Resume</a>
         @endif
 

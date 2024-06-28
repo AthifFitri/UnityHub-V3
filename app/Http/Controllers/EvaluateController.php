@@ -8,9 +8,11 @@ use App\Models\Course;
 use App\Models\Evaluation;
 use App\Models\EvaluationCriteria;
 use App\Models\EvaluationScore;
+use App\Models\Session;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class EvaluateController extends Controller
 {
@@ -156,9 +158,68 @@ class EvaluateController extends Controller
         return redirect()->back()->with('success', 'Criteria deleted successfully');
     }
 
+    public function studentEvaluateOverview_coordinator(Request $request)
+    {
+        $sessions = Session::with(['students.supervisorDetails', 'students.coachDetails'])->get();
+        return view('coordinator.evaluation.studentEvaluateOverview', compact('sessions'));
+    }
+
+    public function studentEvaluateDetails_coordinator($stuId)
+    {
+        $student = Student::with(['sessionDetails.courses.evaluations.assessment'])->findOrFail($stuId);
+        $courses = $student->sessionDetails->courses;
+
+        $evaluationScores = EvaluationScore::where('stuId', $stuId)
+            ->with(['criteria.evaluation'])
+            ->get();
+
+        $marksByPloAndAssessor = [];
+        $allPlosByCourse = [];
+        $processedEvaluations = [];
+
+        foreach ($courses as $course) {
+            $plos = $course->evaluations->pluck('plo')->unique();
+            $sortedPlos = $plos->sort()->values()->all();
+            $allPlosByCourse[$course->courseId] = $sortedPlos;
+
+            foreach ($course->evaluations as $evaluation) {
+                $plo = $evaluation->plo;
+                $assessorType = $evaluation->assessor;
+                $evaId = $evaluation->evaId;
+
+                if (in_array($evaId, $processedEvaluations)) {
+                    continue;
+                }
+                $processedEvaluations[] = $evaId;
+
+                if (!isset($marksByPloAndAssessor[$course->courseId][$plo][$assessorType])) {
+                    $marksByPloAndAssessor[$course->courseId][$plo][$assessorType] = 0;
+                }
+
+                $filteredScores = $evaluationScores->filter(function ($score) use ($evaId) {
+                    return $score->criteria->evaluation->evaId == $evaId;
+                });
+
+                // Calculate total score considering the weights
+                $totalScore = 0;
+                foreach ($filteredScores as $score) {
+                    $weight = $score->criteria->weight;
+                    $weightedScore = $score->score * $weight;
+                    $totalScore += $weightedScore;
+                }
+
+                $marksByPloAndAssessor[$course->courseId][$plo][$assessorType] += $totalScore;
+            }
+        }
+
+        return view('coordinator.evaluation.studentEvaluateDetails', compact('student', 'courses', 'marksByPloAndAssessor', 'allPlosByCourse'));
+    }
+
     public function index_supervisor()
     {
-        $students = Student::all();
+        $supervisor = Auth::user();
+
+        $students = $supervisor->students;
 
         $evaluations = Evaluation::with(['criteria', 'course', 'assessment'])
             ->where('assessor', 'University')
@@ -167,15 +228,30 @@ class EvaluateController extends Controller
         $evaluationsGrouped = $evaluations->groupBy('course.courseCode')->sortKeys();
 
         $assessmentByCourse = [];
+        $totalMarksByAssessment = [];
+
         foreach ($evaluationsGrouped as $courseCode => $evaluations) {
             $assessments = [];
             foreach ($evaluations as $evaluation) {
                 $assessments[$evaluation->assessmentId] = $evaluation->assessment->assessmentName;
+
+                foreach ($evaluation->criteria as $criterion) {
+                    $existingScores = EvaluationScore::where('evaCriId', $criterion->evaCriId)->get();
+                    foreach ($existingScores as $score) {
+                        // Initialize the nested array if not already set
+                        $key = $score->stuId . '_' . $evaluation->course->courseCode . '_' . $evaluation->assessmentId;
+                        if (!isset($totalMarksByAssessment[$key])) {
+                            $totalMarksByAssessment[$key] = 0;
+                        }
+                        // Aggregate scores for each student, course, and assessment
+                        $totalMarksByAssessment[$key] += $score->score * $criterion->weight;
+                    }
+                }
             }
             $assessmentByCourse[$courseCode] = $assessments;
         }
 
-        return view('supervisor.evaluation.index', compact('students', 'evaluationsGrouped', 'assessmentByCourse'));
+        return view('supervisor.evaluation.index', compact('students', 'evaluationsGrouped', 'assessmentByCourse', 'totalMarksByAssessment'));
     }
 
     public function documentEvaluate_supervisor($stuId)
@@ -376,6 +452,45 @@ class EvaluateController extends Controller
         }
 
         return redirect()->route('supervisors.evaluations.projectOutputEvaluate', ['stuId' => $stuId])->with('success', 'Evaluation scores saved successfully.');
+    }
+
+    public function index_coach()
+    {
+        $coach = Auth::user();
+
+        $students = $coach->students;
+
+        $evaluations = Evaluation::with(['criteria', 'course', 'assessment'])
+            ->where('assessor', 'Industry')
+            ->get();
+
+        $evaluationsGrouped = $evaluations->groupBy('course.courseCode')->sortKeys();
+
+        $assessmentByCourse = [];
+        $totalMarksByAssessment = [];
+
+        foreach ($evaluationsGrouped as $courseCode => $evaluations) {
+            $assessments = [];
+            foreach ($evaluations as $evaluation) {
+                $assessments[$evaluation->assessmentId] = $evaluation->assessment->assessmentName;
+
+                foreach ($evaluation->criteria as $criterion) {
+                    $existingScores = EvaluationScore::where('evaCriId', $criterion->evaCriId)->get();
+                    foreach ($existingScores as $score) {
+                        // Initialize the nested array if not already set
+                        $key = $score->stuId . '_' . $evaluation->course->courseCode . '_' . $evaluation->assessmentId;
+                        if (!isset($totalMarksByAssessment[$key])) {
+                            $totalMarksByAssessment[$key] = 0;
+                        }
+                        // Aggregate scores for each student, course, and assessment
+                        $totalMarksByAssessment[$key] += $score->score * $criterion->weight;
+                    }
+                }
+            }
+            $assessmentByCourse[$courseCode] = $assessments;
+        }
+
+        return view('coach.evaluation.index', compact('students', 'evaluationsGrouped', 'assessmentByCourse', 'totalMarksByAssessment'));
     }
 
     public function documentEvaluate_coach($stuId)

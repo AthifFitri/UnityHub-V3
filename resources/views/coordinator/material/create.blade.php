@@ -12,7 +12,9 @@
                 {{-- Material Type --}}
                 <div class="mb-4">
                     <label for="matType" class="block font-medium text-base text-gray-700">Material Type</label>
-                    <select name="matType" id="matType" class="block w-full rounded-md p-1" required>
+                    <select name="matType" id="matType"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                        required>
                         <option value="" disabled selected>Select type</option>
                         <option value="rubric">Rubric</option>
                         <option value="guideline">Guideline</option>
@@ -23,7 +25,9 @@
                 {{-- Material Title --}}
                 <div class="mb-4">
                     <label for="matTitle" class="block font-medium text-base text-gray-700">Material Title</label>
-                    <textarea name="matTitle" id="matTitle" rows="2" class="block w-full rounded-md p-1" required></textarea>
+                    <textarea name="matTitle" id="matTitle" rows="2"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                        required></textarea>
                 </div>
 
                 {{-- Material Content --}}

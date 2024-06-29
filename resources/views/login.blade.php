@@ -48,16 +48,18 @@
                         {{-- Email Address --}}
                         <div>
                             <label class="block font-medium text-base text-gray-700" for="email">Email</label>
-                            <input id="email" class="block mt-1 w-full rounded-md p-1" type="email" name="email"
-                                required />
+                            <input id="email"
+                                class="block w-full rounded-md p-1 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                                type="email" name="email" required />
                         </div>
 
                         {{-- Password --}}
                         <div class="mt-4 relative">
                             <label class="block font-medium text-base text-gray-700" for="password">Password</label>
-                            <input id="password" class="block mt-1 w-full rounded-md p-1" type="password" name="password"
-                                required />
-                            <i class="absolute right-2 top-8 cursor-pointer text-gray-500 hover:text-gray-700"
+                            <input id="password"
+                                class="block w-full rounded-md p-1 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                                type="password" name="password" required />
+                            <i class="absolute right-2 top-7 cursor-pointer text-gray-500 hover:text-gray-700"
                                 onclick="togglePasswordVisibility('password', 'passwordToggleIcon')">
                                 <i id="passwordToggleIcon" class="fas fa-eye"></i>
                             </i>

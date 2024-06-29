@@ -12,7 +12,9 @@
                 {{-- Document Type --}}
                 <div class="mb-4">
                     <label for="docType" class="block font-medium text-base text-gray-700">Document Type</label>
-                    <select name="docType" id="docType" class="block w-full rounded-md p-1" required>
+                    <select name="docType" id="docType"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                        required>
                         <option value="" disabled selected>Select type</option>
                         @foreach ($availableDocumentTypes as $docType => $displayName)
                             <option value="{{ $docType }}">{{ $displayName }}</option>
@@ -23,7 +25,9 @@
                 {{-- Document Title --}}
                 <div class="mb-4">
                     <label for="docTitle" class="block font-medium text-base text-gray-700">Document Title</label>
-                    <textarea name="docTitle" id="docTitle" rows="2" class="block w-full rounded-md p-1" required></textarea>
+                    <textarea name="docTitle" id="docTitle" rows="2"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                        required></textarea>
                 </div>
 
                 {{-- Document Content --}}

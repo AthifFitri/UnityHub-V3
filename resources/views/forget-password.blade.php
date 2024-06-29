@@ -42,7 +42,9 @@
                 {{-- Email Address --}}
                 <div>
                     <label class="block font-medium text-base text-gray-700" for="email">Email</label>
-                    <input id="email" class="block mt-1 w-full rounded-md p-1" type="email" name="email" required />
+                    <input id="email"
+                        class="block w-full rounded-md p-1 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                        type="email" name="email" required />
                 </div>
 
                 <div class="flex items-center justify-center mt-4">

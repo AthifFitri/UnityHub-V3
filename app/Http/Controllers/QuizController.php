@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Quiz;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class QuizController extends Controller
 {
@@ -38,5 +39,13 @@ class QuizController extends Controller
         );
 
         return redirect()->route('coordinators.quizes.index', $stuId)->with('success', 'Quiz score updated successfully.');
+    }
+
+    public function index_student()
+    {
+        $student = Auth::user();
+        $courses = Course::whereIn('courseCode', ['CSM4908', 'CSM4928'])->get();
+
+        return view('student.quiz.index', compact('student', 'courses'));
     }
 }

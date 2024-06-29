@@ -12,30 +12,34 @@
                 {{-- Coach Name --}}
                 <div class="mb-4">
                     <label for="coachName" class="block font-medium text-base text-gray-700">Name</label>
-                    <input type="text" name="coachName" id="coachName" class="block w-full rounded-md p-1"
+                    <input type="text" name="coachName" id="coachName"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
                         value="{{ old('coachName') }}" required>
                 </div>
 
                 {{-- Coach Phone Number --}}
                 <div class="mb-4">
                     <label for="coachPhone" class="block font-medium text-base text-gray-700">Phone Number</label>
-                    <input type="text" name="coachPhone" id="coachPhone" class="block w-full rounded-md p-1"
+                    <input type="text" name="coachPhone" id="coachPhone"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
                         value="{{ old('coachPhone') }}" required>
                 </div>
 
                 {{-- Coach Email --}}
                 <div class="mb-4">
                     <label for="coachEmail" class="block font-medium text-base text-gray-700">Email</label>
-                    <input type="email" name="coachEmail" id="coachEmail" class="block w-full rounded-md p-1"
+                    <input type="email" name="coachEmail" id="coachEmail"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
                         value="{{ old('coachEmail') }}" required>
                 </div>
 
                 {{-- Coach Temporary Password --}}
                 <div class="mb-4 relative">
                     <label for="coachPassword" class="block font-medium text-base text-gray-700">Password</label>
-                    <input type="password" name="coachPassword" id="coachPassword" class="block w-full rounded-md p-1"
+                    <input type="password" name="coachPassword" id="coachPassword"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
                         required>
-                    <i class="absolute right-2 top-7 cursor-pointer text-gray-500 hover:text-gray-700"
+                    <i class="absolute right-2 top-8 cursor-pointer text-gray-500 hover:text-gray-700"
                         onclick="togglePasswordVisibility('coachPassword', 'coachPasswordToggleIcon')">
                         <i id="coachPasswordToggleIcon" class="fas fa-eye"></i>
                     </i>
@@ -47,7 +51,9 @@
                 {{-- Coach Industry --}}
                 <div class="mb-4">
                     <label for="indId" class="block font-medium text-base text-gray-700">Industry</label>
-                    <select name="indId" id="indId" class="block w-full rounded-md p-1" required>
+                    <select name="indId" id="indId"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                        required>
                         <option value="" disabled selected>Select type</option>
                         @foreach ($industries as $industry)
                             <option value="{{ $industry->indId }}">{{ $industry->indName }}</option>

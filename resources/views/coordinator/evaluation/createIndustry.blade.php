@@ -15,7 +15,7 @@
                 <div class="mb-4">
                     <label for="course" class="block font-medium text-base text-gray-700">Course</label>
                     <select name="course" id="course"
-                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
                         required>
                         <option value="" disabled selected>Select Course</option>
                         @foreach ($courses as $course)
@@ -28,7 +28,7 @@
                 <div class="mb-4">
                     <label for="assessment" class="block font-medium text-base text-gray-700">Assessment</label>
                     <select name="assessment" id="course"
-                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
                         required>
                         <option value="" disabled selected>Select Assessment</option>
                         @foreach ($assessments as $assessment)
@@ -42,7 +42,7 @@
                     <label for="plo" class="block font-medium text-base text-gray-700">Choose Program Learning Outcome
                         (PLO)</label>
                     <select name="plo" id="plo"
-                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
                         required>
                         <option value="" disabled selected>Select PLO</option>
                         @foreach (range(2, 9) as $plo)

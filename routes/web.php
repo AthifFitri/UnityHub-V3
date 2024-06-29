@@ -71,6 +71,9 @@ Route::middleware('auth:student')->group(function () {
     Route::get('/student/documentation/edit/{id}', [DocumentController::class, 'edit_student'])->name('student.documents.edit');
     Route::put('/student/documentation/update/{id}', [DocumentController::class, 'update_student'])->name('student.documents.update');
     Route::delete('/student/documentation/delete/{id}', [DocumentController::class, 'destroy_student'])->name('student.documents.destroy');
+
+    // Module Manage Quiz
+    Route::get('/student/quiz/index', [QuizController::class, 'index_student'])->name('students.quizes.index');
 });
 
 // Authenticated Routes for Staff
@@ -130,6 +133,9 @@ Route::middleware('auth:staff')->group(function () {
     Route::get('/coordinator/material/edit/{id}', [MaterialController::class, 'edit_coordinator'])->name('coordinators.materials.edit');
     Route::put('/coordinator/material/update/{id}', [MaterialController::class, 'update_coordinator'])->name('coordinators.materials.update');
     Route::delete('/coordinator/material/delete/{id}', [MaterialController::class, 'destroy_coordinator'])->name('coordinators.materials.destroy');
+
+    // Module Manage Documentation for Supervisor
+    Route::get('/coordinator/documentation/index', [DocumentController::class, 'index_coordinator'])->name('coordinators.documents.index');
 
     // Module Manage Quiz for Coordinator
     Route::get('/coordinator/quiz/index', [QuizController::class, 'index_coordinator'])->name('coordinators.quizes.index');
@@ -193,6 +199,10 @@ Route::middleware('auth:staff')->group(function () {
     Route::get('/hop/profile/index', [ProfileController::class, 'index_hop'])->name('hop.profile.index');
     Route::get('/hop/profile/edit', [ProfileController::class, 'edit_hop'])->name('hop.profile.edit');
     Route::post('/hop/profile', [ProfileController::class, 'update_hop'])->name('hop.profile.update');
+
+    // Module Manange Evaluation for Hop
+    Route::get('/hop/evaluation/studentEvaluateOverview', [EvaluateController::class, 'studentEvaluateOverview_hop'])->name('hop.evaluations.studentEvaluateOverview');
+    Route::get('/hop/evaluation/studentEvaluateDetails/stuId={stuId}', [EvaluateController::class, 'studentEvaluateDetails_hop'])->name('hop.evaluations.studentEvaluateDetails');
 });
 
 

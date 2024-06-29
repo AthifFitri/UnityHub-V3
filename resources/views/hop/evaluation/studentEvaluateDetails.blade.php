@@ -135,7 +135,7 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                var activeCourseTab = localStorage.getItem('activeCourseTab_coordinatorStudentEvaluateDetails');
+                var activeCourseTab = localStorage.getItem('activeCourseTab_hopStudentEvaluateDetails');
                 if (activeCourseTab) {
                     switchCourseTab(activeCourseTab);
                 } else {
@@ -201,11 +201,11 @@
                 document.getElementById('evaluation' + activeCourseTab).classList.remove('hidden');
                 document.getElementById('tab' + activeCourseTab).classList.remove('bg-gray-300');
                 document.getElementById('tab' + activeCourseTab).classList.add('bg-blue-500', 'text-white');
-                localStorage.setItem('activeCourseTab_coordinatorStudentEvaluateDetails', activeCourseTab);
+                localStorage.setItem('activeCourseTab_hopStudentEvaluateDetails', activeCourseTab);
             }
 
             function printReport() {
-                var activeCourseTab = localStorage.getItem('activeCourseTab_coordinatorStudentEvaluateDetails');
+                var activeCourseTab = localStorage.getItem('activeCourseTab_hopStudentEvaluateDetails');
                 var tabs = document.querySelectorAll('[id^="evaluation"]');
                 tabs.forEach(function(tab) {
                     if (tab.id !== 'evaluation' + activeCourseTab) {

@@ -19,9 +19,10 @@
                 {{-- New Password --}}
                 <div class="mt-4 relative">
                     <label class="block font-medium text-base text-gray-700" for="password">New Password</label>
-                    <input id="password" class="block mt-1 w-full rounded-md p-1" type="password" name="password"
-                        required />
-                    <i class="absolute right-2 top-8 cursor-pointer text-gray-500 hover:text-gray-700"
+                    <input id="password"
+                        class="block w-full rounded-md p-1 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                        type="password" name="password" required />
+                    <i class="absolute right-2 top-7 cursor-pointer text-gray-500 hover:text-gray-700"
                         onclick="togglePasswordVisibility('password', 'passwordToggleIcon')">
                         <i id="passwordToggleIcon" class="fas fa-eye"></i>
                     </i>
@@ -36,9 +37,10 @@
                 <div class="mt-4 relative">
                     <label class="block font-medium text-base text-gray-700" for="password_confirmation">Confirm
                         Password</label>
-                    <input id="password_confirmation" class="block mt-1 w-full rounded-md p-1" type="password"
-                        name="password_confirmation" required />
-                    <i class="absolute right-2 top-8 cursor-pointer text-gray-500 hover:text-gray-700"
+                    <input id="password_confirmation"
+                        class="block w-full rounded-md p-1 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                        type="password" name="password_confirmation" required />
+                    <i class="absolute right-2 top-7 cursor-pointer text-gray-500 hover:text-gray-700"
                         onclick="togglePasswordVisibility('password_confirmation', 'confirmPasswordToggleIcon')">
                         <i id="confirmPasswordToggleIcon" class="fas fa-eye"></i>
                     </i>

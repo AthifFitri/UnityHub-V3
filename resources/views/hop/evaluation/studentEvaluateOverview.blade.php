@@ -55,7 +55,7 @@
                                                 <td class="border px-4 py-2">{{ $coach->coachName ?? '-' }}</td>
                                                 <td class="border px-4 py-2">
                                                     <div class="flex justify-center space-x-5">
-                                                        <a href="{{ route('coordinators.evaluations.studentEvaluateDetails', $student->stuId) }}"
+                                                        <a href="{{ route('hop.evaluations.studentEvaluateDetails', $student->stuId) }}"
                                                             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">View</a>
                                                     </div>
                                                 </td>
@@ -73,7 +73,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var activeTab = localStorage.getItem('activeSessionTab_coordinatorStudentEvaluateOverview');
+            var activeTab = localStorage.getItem('activeSessionTab_hopStudentEvaluateOverview');
             if (activeTab) {
                 switchTab(activeTab);
             } else {
@@ -97,7 +97,7 @@
             document.getElementById('session' + sessionId).classList.remove('hidden');
             document.getElementById('tab' + sessionId).classList.remove('bg-gray-300');
             document.getElementById('tab' + sessionId).classList.add('bg-blue-500', 'text-white');
-            localStorage.setItem('activeSessionTab_coordinatorStudentEvaluateOverview', sessionId);
+            localStorage.setItem('activeSessionTab_hopStudentEvaluateOverview', sessionId);
         }
     </script>
 @endsection

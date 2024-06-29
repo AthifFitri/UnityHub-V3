@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Document;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -144,6 +145,22 @@ class DocumentController extends Controller
         $document->delete();
 
         return redirect()->route('student.documents.index')->with('success', 'Document deleted successfully!');
+    }
+
+    public function index_coordinator(Request $request)
+    {
+        $students = Student::all();
+
+        $selectedStudentId = $request->input('stuId');
+        $documentTypes = $this->getDocumentTypes();
+
+        if ($selectedStudentId) {
+            $documents = Document::where('stuId', $selectedStudentId)->get();
+        } else {
+            $documents = collect();
+        }
+
+        return view('coordinator.documentation.index', compact('documents', 'documentTypes', 'students', 'selectedStudentId'));
     }
 
     public function index_supervisor(Request $request)

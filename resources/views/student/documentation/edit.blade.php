@@ -17,13 +17,15 @@
                         <p class="text-orange-500 text-xs mb-1">You are currently editing this document</p>
                     </label>
                     <input type="text" id="docType" value="{{ $documentTypes[$document->docType] ?? '' }}" readonly
-                        class="block w-full rounded-md p-1 bg-gray-100" disabled>
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150">
                 </div>
 
                 {{-- Document Title --}}
                 <div class="mb-4">
                     <label for="docTitle" class="block font-medium text-base text-gray-700">Document Title</label>
-                    <textarea type="text" name="docTitle" id="docTitle" rows="2" class="block w-full rounded-md p-1" required>{{ $document->docTitle }}</textarea>
+                    <textarea type="text" name="docTitle" id="docTitle" rows="2"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                        required>{{ $document->docTitle }}</textarea>
                 </div>
 
                 {{-- Document Content --}}

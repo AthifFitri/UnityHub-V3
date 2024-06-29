@@ -15,7 +15,9 @@
                     {{-- Logbook Week --}}
                     <div class="mb-4">
                         <label for="week" class="block font-medium text-base text-gray-700">Week</label>
-                        <select name="week" id="week" class="block w-full rounded-md p-1" required>
+                        <select name="week" id="week"
+                            class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                            required>
                             <option value="" disabled>Select week</option>
                             @for ($i = 1; $i <= 26; $i++)
                                 <option value="{{ $i }}" @if ($entry->week == $i) selected @endif>
@@ -27,21 +29,24 @@
                     {{-- Logbook Start Date --}}
                     <div class="mb-4">
                         <label for="start_date" class="block font-medium text-base text-gray-700">Start Date</label>
-                        <input type="date" name="start_date" id="start_date" class="block w-full rounded-md p-1"
+                        <input type="date" name="start_date" id="start_date"
+                            class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
                             value="{{ $entry->start_date }}" required>
                     </div>
 
                     {{-- Logbook End Date --}}
                     <div class="mb-4">
                         <label for="end_date" class="block font-medium text-base text-gray-700">End Date</label>
-                        <input type="date" name="end_date" id="end_date" class="block w-full rounded-md p-1"
+                        <input type="date" name="end_date" id="end_date"
+                            class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
                             value="{{ $entry->end_date }}" required>
                     </div>
 
                     {{-- Attendance --}}
                     <div class="mb-4">
                         <label for="attendance" class="block font-medium text-base text-gray-700">Attendance
-                            <p class="text-orange-500 text-xs mb-2">* You have to upload your proof when you choose Annual Leave / Medical Leave</p>
+                            <p class="text-orange-500 text-xs mb-2">* You have to upload your proof when you choose Annual
+                                Leave / Medical Leave</p>
                         </label>
                         <div class="overflow-x-auto">
                             <table class="w-full border">
@@ -57,7 +62,8 @@
                                             <td class="border px-4 py-2">Day {{ $i }}</td>
                                             <td class="border px-4 py-2">
                                                 <select name="attendance[{{ $i }}]"
-                                                    class="attendance-select block w-full rounded-md p-2" required>
+                                                    class="attendance-select block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                                                    required>
                                                     <option value="present"
                                                         {{ isset(json_decode($entry->attendance, true)[$i]) && json_decode($entry->attendance, true)[$i] === 'present' ? 'selected' : '' }}>
                                                         Present</option>
@@ -108,20 +114,26 @@
                 {{-- Activities --}}
                 <div class="mb-4">
                     <label for="daily_activities" class="block font-medium text-base text-gray-700">Daily Activities</label>
-                    <textarea name="daily_activities" id="daily_activities" rows="4" class="block w-full rounded-md p-1" required>{{ $entry->daily_activities }}</textarea>
+                    <textarea name="daily_activities" id="daily_activities" rows="4"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                        required>{{ $entry->daily_activities }}</textarea>
                 </div>
 
                 {{-- Knowledge/Skills --}}
                 <div class="mb-4">
                     <label for="knowledge_skill" class="block font-medium text-base text-gray-700">Knowledge/Skills
                         Gained</label>
-                    <textarea name="knowledge_skill" id="knowledge_skill" rows="4" class="block w-full rounded-md p-1" required>{{ $entry->knowledge_skill }}</textarea>
+                    <textarea name="knowledge_skill" id="knowledge_skill" rows="4"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                        required>{{ $entry->knowledge_skill }}</textarea>
                 </div>
 
                 {{-- Problem/Comments --}}
                 <div class="mb-4">
                     <label for="problem_comment" class="block font-medium text-base text-gray-700">Problems/Comments</label>
-                    <textarea name="problem_comment" id="problem_comment" rows="4" class="block w-full rounded-md p-1" required>{{ $entry->problem_comment }}</textarea>
+                    <textarea name="problem_comment" id="problem_comment" rows="4"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                        required>{{ $entry->problem_comment }}</textarea>
                 </div>
 
                 {{-- Hidden Fields --}}

@@ -134,7 +134,8 @@
                         <a href="#" id="studentDropdown"
                             class="hover:text-blue-400 @if (request()->routeIs('coordinators.infos.index') ||
                                     request()->routeIs('coordinators.sessions.studentSession') ||
-                                    request()->routeIs('coordinators.quizes.index')) font-semibold text-blue-400 @endif">Student</a>
+                                    request()->routeIs('coordinators.quizes.index')) font-semibold text-blue-400 @endif">Student
+                            Information</a>
                         <ul class="absolute left-0 hidden mt-2 bg-white border border-gray-200 rounded-md shadow-lg z-10"
                             id="studentMenu">
                             <li>
@@ -296,6 +297,7 @@
             @auth('student')
                 <li>
                     <div class="relative">
+                        <span class="ml-2 text-gray-500">Student :</span>
                         <button id="profileDropdown"
                             class="hover:text-blue-400">{{ auth('student')->user()->stuName }}</button>
                         <ul id="dropdownMenu"
@@ -319,8 +321,10 @@
                 @endphp
                 <li>
                     <div class="relative">
+                        <span class="ml-2 text-gray-500">{{ auth('staff')->user()->position->posName }} :</span>
                         <button id="profileDropdown"
                             class="hover:text-blue-400">{{ auth('staff')->user()->staffName }}</button>
+
                         <ul id="dropdownMenu"
                             class="absolute hidden right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
                             {{-- Supervisor Profile --}}
@@ -354,6 +358,7 @@
             @auth('coach')
                 <li>
                     <div class="relative">
+                        <span class="ml-2 text-gray-500">Coach :</span>
                         <button id="profileDropdown"
                             class="hover:text-blue-400">{{ auth('coach')->user()->coachName }}</button>
                         <ul id="dropdownMenu"

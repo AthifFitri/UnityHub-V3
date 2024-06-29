@@ -14,7 +14,6 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\StudentInformationController;
-use App\Models\Assessment;
 
 /*
 |--------------------------------------------------------------------------

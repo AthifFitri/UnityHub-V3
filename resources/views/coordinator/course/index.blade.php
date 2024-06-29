@@ -36,7 +36,7 @@
                                 <td class="border px-4 py-2">{{ $course->session->sessionSemester }}
                                     {{ $course->session->sessionYear }}</td>
                                 <td class="border px-4 py-2">{{ $course->courseCode }}</td>
-                                <td class="border px-4 py-2">{{ $course->courseName }}</td>
+                                <td class="border px-4 py-2 text-justify">{{ $course->courseName }}</td>
                                 <td class="border px-4 py-2">
                                     <div class="flex justify-center space-x-5">
                                         <a href="{{ route('coordinators.courses.edit', $course->courseId) }}"

@@ -30,19 +30,18 @@
                         @if ($session->students->isEmpty())
                             <p class="text-gray-500 text-center">No students in this session!</p>
                         @else
-                            @foreach ($session->students->groupBy('supervisorDetails.staffId') as $supervisorId => $students)
-                                @php $supervisor = $students->first()->supervisorDetails; @endphp
-
-                                <table class="w-full border mb-4">
-                                    <thead>
-                                        <tr class="bg-gray-400 text-white">
-                                            <th class="border border-gray-300 p-2">University Supervisor</th>
-                                            <th class="border border-gray-300 p-2">Student</th>
-                                            <th class="border border-gray-300 p-2">Industry Supervisor / Coach</th>
-                                            <th class="border border-gray-300 p-2">Detail Evaluation</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                            <table class="w-full border mb-4">
+                                <thead>
+                                    <tr class="bg-gray-400 text-white">
+                                        <th class="border border-gray-300 p-2">University Supervisor</th>
+                                        <th class="border border-gray-300 p-2">Student</th>
+                                        <th class="border border-gray-300 p-2">Industry Supervisor / Coach</th>
+                                        <th class="border border-gray-300 p-2">Detail Evaluation</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($session->students->groupBy('supervisorDetails.staffId') as $supervisorId => $students)
+                                        @php $supervisor = $students->first()->supervisorDetails; @endphp
                                         @php $rowspan = count($students); @endphp
                                         @foreach ($students as $index => $student)
                                             @php $coach = $student->coachDetails; @endphp
@@ -61,9 +60,9 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-                                    </tbody>
-                                </table>
-                            @endforeach
+                                    @endforeach
+                                </tbody>
+                            </table>
                         @endif
                     </div>
                 @endforeach

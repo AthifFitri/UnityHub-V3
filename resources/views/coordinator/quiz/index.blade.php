@@ -36,7 +36,7 @@
                                 @if ($loop->first)
                                     <td class="border px-4 py-2 bg-gray-100" rowspan="{{ $rowCount }}">
                                         {{ $loop->parent->iteration }}</td>
-                                    <td class="border px-4 py-2 bg-gray-100" rowspan="{{ $rowCount }}">
+                                    <td class="border px-4 py-2 bg-gray-100 text-justify" rowspan="{{ $rowCount }}">
                                         {{ $student->stuName }}</td>
                                 @endif
                                 <td class="border px-4 py-2">{{ $course->courseCode }}</td>

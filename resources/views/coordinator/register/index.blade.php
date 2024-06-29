@@ -48,10 +48,10 @@
                         @foreach ($coaches as $coach)
                             <tr class="text-center">
                                 <td class="border px-4 py-2">{{ $loop->iteration }}</td>
-                                <td class="border px-4 py-2">{{ $coach->coachName }}</td>
+                                <td class="border px-4 py-2 text-justify">{{ $coach->coachName }}</td>
                                 <td class="border px-4 py-2">{{ $coach->coachPhone }}</td>
                                 <td class="border px-4 py-2">{{ $coach->coachEmail }}</td>
-                                <td class="border px-4 py-2">{{ $coach->industry->indName }}</td>
+                                <td class="border px-4 py-2 text-justify">{{ $coach->industry->indName }}</td>
                                 <td class="border px-4 py-2">
                                     <div class="flex justify-center space-x-5">
                                         @if ($coach->coachResume == null)

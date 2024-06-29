@@ -48,7 +48,7 @@
                                             @foreach ($students->where('session', $session->sessionId) as $student)
                                                 <tr class="text-center">
                                                     <td class="border px-4 py-2">{{ $loop->iteration }}</td>
-                                                    <td class="border px-4 py-2">{{ $student->stuName }}</td>
+                                                    <td class="border px-4 py-2 text-justify">{{ $student->stuName }}</td>
                                                     <td class="border px-4 py-2">
                                                         {{ $student->sessionDetails ? $student->sessionDetails->sessionSemester . ' ' . $student->sessionDetails->sessionYear : 'N/A' }}
                                                     </td>

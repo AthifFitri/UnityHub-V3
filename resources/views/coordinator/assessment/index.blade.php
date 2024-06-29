@@ -32,8 +32,8 @@
                         @foreach ($assessments as $assessment)
                             <tr class="text-center">
                                 <td class="border px-4 py-2">{{ $loop->iteration }}</td>
-                                <td class="border px-4 py-2">{{ $assessment->assessmentName }}</td>
-                                <td class="border px-4 py-2">{{ $assessment->assessmentDescription ?? '-' }}</td>
+                                <td class="border px-4 py-2 text-justify">{{ $assessment->assessmentName }}</td>
+                                <td class="border px-4 py-2 text-justify">{{ $assessment->assessmentDescription ?? '-' }}</td>
                                 <td class="border px-4 py-2">
                                     <div class="flex justify-center space-x-5">
                                         <a href="{{ route('coordinators.assessments.edit', $assessment->assessmentId) }}"

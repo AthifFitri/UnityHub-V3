@@ -9,7 +9,7 @@
             <form action="{{ route('coaches.profile.update') }}" method="POST">
                 @csrf
 
-                {{-- Student Name --}}
+                {{-- Coach Name --}}
                 <div class="mb-4">
                     <label for="coachName" class="block font-medium text-base text-gray-700">Full Name</label>
                     <input type="text" name="coachName" id="coachName"
@@ -17,10 +17,10 @@
                         value="{{ $coach->coachName }}" required>
                 </div>
 
-                {{-- Student Phone Number --}}
+                {{-- Coach Phone Number --}}
                 <div class="mb-4">
                     <label for="coachPhone" class="block font-medium text-base text-gray-700">Phone Number</label>
-                    <input type="text" name="coachPhone" id="coachPhone"
+                    <input type="number" name="coachPhone" id="coachPhone"
                         class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
                         value="{{ $coach->coachPhone }}" required>
                 </div>

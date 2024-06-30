@@ -12,14 +12,16 @@
                 {{-- Staff Name --}}
                 <div class="mb-4">
                     <label for="staffName" class="block font-medium text-base text-gray-700">Full Name</label>
-                    <input type="text" name="staffName" id="staffName" class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                    <input type="text" name="staffName" id="staffName"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
                         value="{{ $coordinator->staffName }}" required>
                 </div>
 
                 {{-- Staff Phone Number --}}
                 <div class="mb-4">
                     <label for="staffPhone" class="block font-medium text-base text-gray-700">Phone Number</label>
-                    <input type="text" name="staffPhone" id="staffPhone" class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
+                    <input type="number" name="staffPhone" id="staffPhone"
+                        class="block w-full rounded-md p-2 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition ease-in-out duration-150"
                         value="{{ $coordinator->staffPhone }}" required>
                 </div>
 

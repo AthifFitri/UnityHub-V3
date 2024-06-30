@@ -44,7 +44,7 @@
                             <tr class="text-center">
                                 <td class="border px-4 py-2">{{ $index + 1 }}</td>
                                 <td class="border px-4 py-2">{{ $material->matType }}</td>
-                                <td class="border px-4 py-2">{{ $material->matTitle }}</td>
+                                <td class="border px-4 py-2 text-justify">{{ $material->matTitle }}</td>
                                 <td class="border px-4 py-2">
                                     <div class="flex justify-center space-x-5">
                                         <a href="{{ asset('materials/' . $material->matContent) }}" target="_blank"
